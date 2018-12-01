@@ -20,6 +20,7 @@ Statements:
 * `make`
 * `erase`
 * `print`
+* `expr`
 * `repeat`
 
 Functions/expressions
@@ -43,9 +44,10 @@ Functions/expressions
 - [x] Bool
 - [x] Word
 - [x] Number
-- [ ] List
+- [x] List
 - [x] Scope
 - [x] Statement
+- [x] Expr
 - [x] Expression
 - [x] Make
 - [x] Erase

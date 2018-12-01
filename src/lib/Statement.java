@@ -8,7 +8,8 @@ abstract public class Statement {
         MAKE,
         ERASE,
         PRINT,
-        REPEAT;
+        REPEAT,
+        EXPR;
 
         @Override
         public String toString() {
@@ -17,6 +18,7 @@ abstract public class Statement {
                 case ERASE: return "erase";
                 case PRINT: return "print";
                 case REPEAT: return "repeat";
+                case EXPR: return "expr";
             }
             return "UNKNOWN";
         }
@@ -29,6 +31,7 @@ abstract public class Statement {
     public String getName() {
         return type.toString();
     }
+
     protected Statement(Type type, ArrayList<MUAObject> arglist) {
         this.type = type;
         this.arglist = arglist;
