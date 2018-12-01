@@ -1,5 +1,7 @@
 package lib;
 
+import lib.except.MUAExcept;
+
 import java.util.ArrayList;
 
 abstract public class Expression {
@@ -35,7 +37,7 @@ abstract public class Expression {
         this.type = type;
         this.arglist = arglist;
     }
-    abstract public MUAObject eval(Scope scope);
+    abstract public MUAObject eval(Scope scope) throws MUAExcept;
 
     protected Type type;
     protected ArrayList<MUAObject> arglist;

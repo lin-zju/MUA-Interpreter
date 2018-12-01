@@ -51,5 +51,7 @@ Functions/expressions
 - [x] Expression
 - [x] Make
 - [x] Erase
-
+- [x] Thing
+- [x] COLON
+- [x] read
    
