@@ -1,9 +1,21 @@
 package lib;
+import lib.except.MUAExcept;
+
 import java.util.ArrayList;
 
 abstract public class Statement {
-    enum Type {
-        MAKE
+    public enum Type {
+        MAKE,
+        ERASE;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case MAKE: return "make";
+                case ERASE: return "erase";
+            }
+            return "UNKNOWN";
+        }
     }
 
     public Type getType() {
@@ -13,7 +25,7 @@ abstract public class Statement {
         this.type = type;
         this.arglist = arglist;
     }
-    abstract public void exec(Scope scope);
+    abstract public void exec(Scope scope) throws MUAExcept;
 
 
     protected Type type;

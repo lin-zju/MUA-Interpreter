@@ -5,7 +5,19 @@ abstract public class MUAObject {
         NUMBER,
         WORD,
         LIST,
-        BOOL
+        BOOL,
+        ANY;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case NUMBER: return "number";
+                case WORD: return "word";
+                case LIST: return "list";
+                case BOOL: return "bool";
+            }
+            return "UNKNOWN";
+        }
     }
 
     private Type type;
