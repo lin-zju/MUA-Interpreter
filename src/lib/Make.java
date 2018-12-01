@@ -12,7 +12,7 @@ public class Make extends Statement {
 
     @Override
     public void exec(Scope scope) throws ArgError {
-        ArgUtil.argCheck(getType().toString(), typelist, arglist);
+        ArgUtil.argCheck(getName(), typelist, arglist);
         Word word = (Word) arglist.get(0);
         MUAObject value = arglist.get(1);
         scope.addName(word, value);

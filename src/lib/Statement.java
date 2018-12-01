@@ -6,13 +6,17 @@ import java.util.ArrayList;
 abstract public class Statement {
     public enum Type {
         MAKE,
-        ERASE;
+        ERASE,
+        PRINT,
+        REPEAT;
 
         @Override
         public String toString() {
             switch (this) {
                 case MAKE: return "make";
                 case ERASE: return "erase";
+                case PRINT: return "print";
+                case REPEAT: return "repeat";
             }
             return "UNKNOWN";
         }
@@ -20,6 +24,10 @@ abstract public class Statement {
 
     public Type getType() {
         return type;
+    }
+
+    public String getName() {
+        return type.toString();
     }
     protected Statement(Type type, ArrayList<MUAObject> arglist) {
         this.type = type;

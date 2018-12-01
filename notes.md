@@ -20,6 +20,7 @@ Statements:
 * `make`
 * `erase`
 * `print`
+* `repeat`
 
 Functions/expressions
 
@@ -46,6 +47,7 @@ Functions/expressions
 - [x] Scope
 - [x] Statement
 - [x] Expression
-- [ ] Make
+- [x] Make
+- [x] Erase
 
    

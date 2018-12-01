@@ -1,4 +1,6 @@
 package lib;
+import lib.except.NameError;
+
 import java.util.HashMap;
 
 public class Scope {
@@ -34,19 +36,19 @@ public class Scope {
         scope.put(name.toString(), value);
     }
 
-    public MUAObject getName(Word name) throws Exception {
+    public MUAObject getName(Word name) throws NameError {
         MUAObject ret = scope.get(name.toString());
         if (ret == null) {
-            throw new Exception("name" + name.toString() + "not found");
+            throw new NameError("name" + name.toString() + "not found");
         }
         return ret;
 
     }
 
-    public void removeName(Word name) throws Exception {
+    public void removeName(Word name) throws NameError {
         MUAObject succeed = scope.remove(name.toString());
         if (succeed == null) {
-            throw new Exception("name" + name.toString() + "not found");
+            throw new NameError("name" + name.toString() + "not found");
         }
 
     }
