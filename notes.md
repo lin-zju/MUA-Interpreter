@@ -54,4 +54,5 @@ Functions/expressions
 - [x] Thing
 - [x] COLON
 - [x] read
+- [x] readlist
    

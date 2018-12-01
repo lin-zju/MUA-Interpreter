@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Read extends Expression {
-    public Read(ArrayList<MUAObject> arglist) {
+public class Readlist extends Expression {
+    public Readlist(ArrayList<MUAObject> arglist) {
         super(Type.READ, arglist);
     }
 
@@ -21,8 +21,11 @@ public class Read extends Expression {
         while (line.trim().equals("")) {
             line = input.nextLine();
         }
-        ArrayList<String> tokens = ParserUtil.parseToken(line);
-        return ParserUtil.parseObj(tokens.get(0));
+        ArrayList<MUAObject> content = new ArrayList<>();
+        for (String token: ParserUtil.parseToken(line)) {
+            content.add(ParserUtil.parseObj(token));
+        }
+        return new List(content);
     }
 
     private ArrayList<MUAObject.Type> typelist = new ArrayList<MUAObject.Type>(Arrays.asList(
