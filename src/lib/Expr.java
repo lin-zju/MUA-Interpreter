@@ -1,10 +1,12 @@
 package lib;
 
 import lib.except.MUAExcept;
+import lib.MUAObject;
+import lib.util.ArgUtil;
 
 import java.util.ArrayList;
 
-abstract public class Expression {
+abstract public class Expr extends MUAObject {
 
     public enum SubType {
         MAKE,
@@ -13,7 +15,11 @@ abstract public class Expression {
         READLIST,
         THING,
         ISNAME,
-        REPEAT;
+        READ,
+        REPEAT,
+        FUNC,
+        Basic;
+
 
         @Override
         public String toString() {
@@ -24,7 +30,9 @@ abstract public class Expression {
                 case READLIST: return "readlist";
                 case THING: return "thing";
                 case ISNAME: return "isname";
+                case READ: return "read";
                 case REPEAT: return "repeat";
+                case FUNC: return "func";
             }
             return "UNKNOWN";
         }
@@ -39,13 +47,36 @@ abstract public class Expression {
     }
 
 
-    protected Expression(SubType subtype, ArrayList<MUAObject> arglist) {
+    protected Expr(SubType subtype, ArrayList<MUAObject> arglist,
+                   ArrayList<MUAObject.Type> typelist) {
+        super(MUAObject.Type.EXPR);
         this.subtype = subtype;
         this.arglist = arglist;
+        this.typelist = typelist;
     }
-    abstract public MUAObject eval(Scope scope) throws MUAExcept;
+    public MUAObject eval(Scope scope) throws Exception {
+        ArgUtil.evalAll(arglist, scope);
+        ArgUtil.argCheck(getName(), typelist, arglist);
+        return new None();
+    }
+
+    @Override
+    public Expr getValue() {
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        String temp = getName();
+        for (MUAObject arg: arglist) {
+            temp += " " + arg.toString();
+        }
+        return temp;
+    }
+
 
     protected SubType subtype;
     protected ArrayList<MUAObject> arglist;
+    protected ArrayList<MUAObject.Type> typelist;
 
 }

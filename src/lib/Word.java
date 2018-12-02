@@ -8,7 +8,7 @@ public class Word extends MUAObject {
 
     @Override
     public String toString() {
-        return value;
+        return "\"" + value;
     }
 
     @Override

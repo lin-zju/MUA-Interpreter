@@ -6,21 +6,25 @@ import java.util.Arrays;
 
 import java.util.ArrayList;
 
-public class Erase extends Statement {
+public class Erase extends Expr{
     public Erase(ArrayList<MUAObject> arglist) {
-        super(Type.ERASE, arglist);
+        super(SubType.ERASE, arglist, argtypes);
     }
-
 
 
     @Override
-    public void exec(Scope scope) throws MUAExcept {
-        ArgUtil.argCheck(getName(), typelist, arglist);
+    public None eval(Scope scope) throws Exception {
+        super.eval(scope);
         Word word = (Word) arglist.get(0);
         scope.removeName(word);
+        return new None();
     }
 
-    private ArrayList<MUAObject.Type> typelist = new ArrayList<MUAObject.Type>(Arrays.asList(
+    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
             MUAObject.Type.WORD
     ));
+
+    public static int getArgNum() {
+        return argtypes.size();
+    }
 }

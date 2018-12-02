@@ -6,6 +6,8 @@ abstract public class MUAObject {
         WORD,
         LIST,
         BOOL,
+        EXPR,
+        NONE,
         ANY;
 
         @Override
@@ -15,6 +17,7 @@ abstract public class MUAObject {
                 case WORD: return "word";
                 case LIST: return "list";
                 case BOOL: return "bool";
+                case EXPR: return "expr";
             }
             return "UNKNOWN";
         }
@@ -22,12 +25,9 @@ abstract public class MUAObject {
 
     private Type type;
 
-
     protected MUAObject(Type type) {
         this.type = type;
     }
-
-
     public Type getType() {
         return type;
     }

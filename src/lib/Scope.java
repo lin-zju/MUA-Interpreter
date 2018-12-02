@@ -39,7 +39,7 @@ public class Scope {
     public MUAObject getName(Word name) throws NameError {
         MUAObject ret = scope.get(name.toString());
         if (ret == null) {
-            throw new NameError("name" + name.toString() + "not found");
+            throw new NameError("name '" + name.toString() + "' not found");
         }
         return ret;
 
@@ -48,9 +48,12 @@ public class Scope {
     public void removeName(Word name) throws NameError {
         MUAObject succeed = scope.remove(name.toString());
         if (succeed == null) {
-            throw new NameError("name" + name.toString() + "not found");
+            throw new NameError("name '" + name.toString() + "' not found");
         }
+    }
 
+    public boolean hasName(Word name) {
+        return scope.containsKey(name.toString());
     }
 
     private String scopeName = "global";
