@@ -2,8 +2,7 @@ package lib.util;
 import lib.Expr;
 import lib.MUAObject;
 import lib.Scope;
-import lib.except.ArgError;
-import lib.except.MUAExcept;
+import lib.error.ArgError;
 
 import java.util.ArrayList;
 
@@ -14,7 +13,7 @@ public class ArgUtil {
 
         // arg count
         if (arglist.size() != typelist.size()) {
-            throw new ArgError(name + " takes 2 arguments but "
+            throw new ArgError(name + " takes " + typelist.size() + " arguments but "
                     + arglist.size() + " were given.");
         }
         for (int i = 0; i < arglist.size(); i++) {

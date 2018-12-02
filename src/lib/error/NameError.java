@@ -1,8 +1,6 @@
-package lib.except;
+package lib.error;
 
-import lib.MUAObject;
-
-public class NameError extends MUAExcept {
+public class NameError extends MUAError {
     public NameError(String s) {
         super(s);
     }

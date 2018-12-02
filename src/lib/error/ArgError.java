@@ -1,6 +1,6 @@
-package lib.except;
+package lib.error;
 
-public class ArgError extends MUAExcept {
+public class ArgError extends MUAError {
 
     public ArgError(String s) {
         super(s);

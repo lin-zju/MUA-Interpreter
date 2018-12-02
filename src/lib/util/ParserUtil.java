@@ -1,9 +1,7 @@
 package lib.util;
 
 import lib.Number;
-import lib.except.MUAExcept;
-import lib.except.ArgError;
-import lib.except.SyntaxError;
+import lib.error.SyntaxError;
 import lib.*;
 
 import java.lang.reflect.Constructor;
@@ -58,7 +56,7 @@ public class ParserUtil {
             ArrayList<MUAObject> arglist = new ArrayList<>();
             for (int i = 0; i < argNum; i++) {
                 if (!objlist.isEmpty()) {
-                    arglist.add(0, objlist.remove(0));
+                    arglist.add(objlist.remove(0));
                 }
             }
             Constructor ctor = c.getConstructor(ArrayList.class);
@@ -70,7 +68,7 @@ public class ParserUtil {
 
     public static ArrayList<String> parseToken(String str) throws SyntaxError {
         ArrayList<String> tokens = new ArrayList<>();
-        String[] items = str.tt rim().split("[ \t\n\r]");
+        String[] items = str.trim().split("[ \t\n\r]");
         int count = 0;
         ArrayList<String> temp = new ArrayList<>();
         for (String item: items) {
@@ -87,10 +85,17 @@ public class ParserUtil {
             }
             else
             {
-                if (item.startsWith("["))
+                String prefix = "[";
+                while (item.startsWith(prefix)) {
                     count++;
-                if (item.endsWith("]"))
+                    prefix += "[";
+                }
+                String suffix = "]";
+                while (item.endsWith(suffix))
+                {
                     count--;
+                    suffix += "]";
+                }
                 temp.add(item);
                 if (count < 0) {
                     throw new SyntaxError("Unpaired ']'");

@@ -1,6 +1,6 @@
-package lib.except;
+package lib.error;
 
-public class SyntaxError extends MUAExcept {
+public class SyntaxError extends MUAError {
     public SyntaxError(String s) {
         super(s);
     }

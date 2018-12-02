@@ -102,4 +102,7 @@ The structure of everything is:
 - [x] print
 - [x] Isname
    
+* Argument
+    * scheme one: add WORD_OR_NUMBEr type
+    * scheme two: multiple typelists
    

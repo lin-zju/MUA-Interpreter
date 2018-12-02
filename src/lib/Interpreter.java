@@ -1,7 +1,7 @@
 package lib;
 
-import lib.except.MUAExcept;
-import lib.except.SyntaxError;
+import lib.error.MUAError;
+import lib.error.SyntaxError;
 
 import static lib.util.ParserUtil.parseObj;
 import static lib.util.ParserUtil.parseToken;
@@ -21,10 +21,10 @@ public class Interpreter {
     public String getLine() throws Exception {
         Scanner input = new Scanner(System.in);
         promptOne();
-        String line = input.nextLine();
+        String line = getLineWithoutComment();
         while (line.trim().equals("")) {
             promptOne();
-            line = input.nextLine();
+            line = getLineWithoutComment();
         }
         while (true) {
             int count = 0;
@@ -41,7 +41,7 @@ public class Interpreter {
             }
             if (count != 0) {
                 promptTwo();
-                String temp = input.nextLine();
+                String temp = getLineWithoutComment();
                 line += " " + temp;
                 continue;
             }
@@ -71,13 +71,22 @@ public class Interpreter {
             }
         }
     }
+    private static  String getLineWithoutComment() {
+        Scanner input = new Scanner(System.in);
+        String line = input.nextLine();
+        int i = line.indexOf("//");
+        if (i != -1) {
+            line = line.substring(0, i);
+        }
+        return line;
+    }
 
     public void next()  {
         try {
             String line = getLine();
             evalLine(line);
         }
-        catch (MUAExcept e) {
+        catch (MUAError e) {
             System.out.println(e.getMessage());
         }
         catch (Exception e) {

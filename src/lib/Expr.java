@@ -1,7 +1,5 @@
 package lib;
 
-import lib.except.MUAExcept;
-import lib.MUAObject;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ abstract public class Expr extends MUAObject {
         READ,
         REPEAT,
         FUNC,
-        Basic;
+        BASIC;
 
 
         @Override
