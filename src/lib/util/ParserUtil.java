@@ -3,6 +3,7 @@ package lib.util;
 import lib.Number;
 import lib.error.SyntaxError;
 import lib.*;
+import lib.operator.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -45,30 +46,32 @@ public class ParserUtil {
         if (obj != null) {
             objlist.add(0, obj);
         }
-        else if (tokenToClass.containsKey(token)){
-            c = tokenToClass.get(token);
-        }
-        else {
-            c = Func.class;
-        }
-        if (c != null) {
-            int argNum = (int) c.getMethod("getArgNum").invoke(null);
+        else if (keywordToClass.containsKey(token)){
+            c = keywordToClass.get(token);
+            Constructor ctor = c.getConstructor();
+            Expr expr = (Expr) ctor.newInstance();
+            int argNum = (int) c.getMethod("getArgNum").invoke(expr);
             ArrayList<MUAObject> arglist = new ArrayList<>();
             for (int i = 0; i < argNum; i++) {
                 if (!objlist.isEmpty()) {
                     arglist.add(objlist.remove(0));
                 }
             }
-            Constructor ctor = c.getConstructor(ArrayList.class);
-            objlist.add(0, (MUAObject) ctor.newInstance(arglist));
+            expr.setArglist(arglist);
+            objlist.add(0, expr);
         }
-
+        else {
+            c = Func.class;
+            objlist.add(new Func());
+        }
     }
 
 
     public static ArrayList<String> parseToken(String str) throws SyntaxError {
         ArrayList<String> tokens = new ArrayList<>();
-        String[] items = str.trim().split("[ \t\n\r]");
+        if (str.trim().equals(""))
+            return tokens;
+        String[] items = str.trim().split("\\s+");
         int count = 0;
         ArrayList<String> temp = new ArrayList<>();
         for (String item: items) {
@@ -114,15 +117,27 @@ public class ParserUtil {
     }
 
 
-    private static final HashMap<String, Class> tokenToClass = new HashMap<>();
+    private static final HashMap<String, Class> keywordToClass = new HashMap<>();
     static {
-        tokenToClass.put("make", Make.class);
-        tokenToClass.put("erase", Erase.class);
-        tokenToClass.put("print", Print.class);
-        tokenToClass.put("readlist", Readlist.class);
-        tokenToClass.put(":", Thing.class);
-        tokenToClass.put("thing", Thing.class);
-        tokenToClass.put("isname", Isname.class);
-        tokenToClass.put("read", Read.class);
+        keywordToClass.put("make", Make.class);
+        keywordToClass.put("erase", Erase.class);
+        keywordToClass.put("print", Print.class);
+        keywordToClass.put("readlist", Readlist.class);
+        keywordToClass.put(":", Thing.class);
+        keywordToClass.put("thing", Thing.class);
+        keywordToClass.put("isname", Isname.class);
+        keywordToClass.put("read", Read.class);
+        keywordToClass.put("add", Add.class);
+        keywordToClass.put("sub", Sub.class);
+        keywordToClass.put("mul", Mul.class);
+        keywordToClass.put("div", Div.class);
+        keywordToClass.put("mod", Mod.class);
+        keywordToClass.put("eq", Eq.class);
+        keywordToClass.put("gt", Gt.class);
+        keywordToClass.put("lt", Lt.class);
+        keywordToClass.put("and", And.class);
+        keywordToClass.put("or", Or.class);
+        keywordToClass.put("not", Not.class);
+
     }
 }

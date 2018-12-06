@@ -8,8 +8,8 @@ import lib.util.ArgUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Or extends Expr {
-    public Or() {
+public class Not extends Expr {
+    public Not() {
         super(SubType.ADD);
     }
 
@@ -18,13 +18,11 @@ public class Or extends Expr {
         super.eval(scope);
         ArgUtil.argCheck(getName(), argtypes, arglist);
         Bool a = (Bool) arglist.get(0);
-        Bool b = (Bool) arglist.get(1);
-        return new Bool(a.getValue() || b.getValue());
+        return new Bool(!a.getValue());
     }
 
 
     final static private ArrayList<Type> argtypes = new ArrayList<Type>(Arrays.asList(
-            Type.BOOL,
             Type.BOOL
     ));
 

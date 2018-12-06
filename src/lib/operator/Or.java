@@ -2,15 +2,14 @@ package lib.operator;
 
 import lib.Bool;
 import lib.Expr;
-import lib.Number;
 import lib.Scope;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class And extends Expr {
-    public And() {
+public class Or extends Expr {
+    public Or() {
         super(SubType.ADD);
     }
 
@@ -20,7 +19,7 @@ public class And extends Expr {
         ArgUtil.argCheck(getName(), argtypes, arglist);
         Bool a = (Bool) arglist.get(0);
         Bool b = (Bool) arglist.get(1);
-        return new Bool(a.getValue() && b.getValue());
+        return new Bool(a.getValue() || b.getValue());
     }
 
 

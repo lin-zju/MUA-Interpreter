@@ -1,16 +1,19 @@
 package lib;
 
+import lib.util.ArgUtil;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Thing extends Expr {
-    public Thing(ArrayList<MUAObject> arglist) {
-        super(SubType.THING, arglist, argtypes);
+    public Thing() {
+        super(SubType.THING);
     }
 
     @Override
     public MUAObject eval(Scope scope) throws Exception {
         super.eval(scope);
+        ArgUtil.argCheck(getName(), argtypes, arglist);
         Word word = (Word) arglist.get(0);
         return scope.getName(word);
 
@@ -19,7 +22,7 @@ public class Thing extends Expr {
     final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
             MUAObject.Type.WORD
     ));
-    public static int getArgNum() {
+    public int getArgNum() {
         return argtypes.size();
     }
 }

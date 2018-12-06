@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Func extends Expr {
-    public Func(ArrayList<MUAObject> arglist) {
-        super(SubType.FUNC, arglist, argtypes);
+    public Func() {
+        super(SubType.FUNC);
     }
 
     @Override
@@ -15,10 +15,16 @@ public class Func extends Expr {
     }
 
 
+    @Override
+    public String getName() {
+        return "func";
+    }
+
     final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
     ));
 
-    public static int getArgNum() {
+    @Override
+    public int getArgNum() {
         return argtypes.size();
     }
 

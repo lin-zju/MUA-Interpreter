@@ -1,18 +1,21 @@
 package lib;
 
+import lib.util.ArgUtil;
+
 import java.util.Arrays;
 
 import java.util.ArrayList;
 
 public class Erase extends Expr{
-    public Erase(ArrayList<MUAObject> arglist) {
-        super(SubType.ERASE, arglist, argtypes);
+    public Erase() {
+        super(SubType.ERASE);
     }
 
 
     @Override
     public None eval(Scope scope) throws Exception {
         super.eval(scope);
+        ArgUtil.argCheck(getName(), argtypes, arglist);
         Word word = (Word) arglist.get(0);
         scope.removeName(word);
         return new None();
@@ -22,7 +25,8 @@ public class Erase extends Expr{
             MUAObject.Type.WORD
     ));
 
-    public static int getArgNum() {
+    @Override
+    public int getArgNum() {
         return argtypes.size();
     }
 }

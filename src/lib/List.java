@@ -16,7 +16,7 @@ public class List extends MUAObject {
             content += (first ? "" : " ") + v.toString();
             first = false;
         }
-        return "[" + content + "]";
+        return  content ;
     }
 
     @Override

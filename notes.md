@@ -86,23 +86,33 @@ The structure of everything is:
 
 * (optional) Keyword + a list of expressions
 
-- [x] MUAObject
-- [x] Bool
-- [x] Word
-- [x] Number
-- [x] List
-- [x] Expr
-- [x] Scope
-- [x] Make
-- [x] Erase
-- [x] Thing
+- [] MUAObject
+- [] Bool
+- [] Word
+- [] Number
+- [] List
+- [] Expr
+- [] Scope
+- [] Make
+- [] Erase
+- [] Thing
 - [] COLON
 - [] read
 - [] readlist
-- [x] print
-- [x] Isname
+- [] print
+- [] Isname
    
 * Argument
     * scheme one: add WORD_OR_NUMBEr type
     * scheme two: multiple typelists
-   
+    
+    
+* Expr
+    * arglist
+    * SubType
+    * getName
+    * toString
+
+
+* list   
+    * save tokens only?

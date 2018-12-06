@@ -7,8 +7,8 @@ import lib.util.ArgUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Lt extends Expr {
-    public Lt() {
+public class Gt extends Expr {
+    public Gt() {
         super(SubType.LT);
     }
 
@@ -19,12 +19,12 @@ public class Lt extends Expr {
         if (i == 0) {
             Number a = (Number) arglist.get(0);
             Number b = (Number) arglist.get(1);
-            return new Bool(a.getValue() < (b.getValue()));
+            return new Bool(a.getValue() > (b.getValue()));
         }
         else {
             Word a = (Word) arglist.get(0);
             Word b = (Word) arglist.get(1);
-            return new Bool(a.getValue().compareTo(b.getValue()) < 0);
+            return new Bool(a.getValue().compareTo(b.getValue()) > 0);
         }
     }
 

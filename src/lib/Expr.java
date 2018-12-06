@@ -15,9 +15,12 @@ abstract public class Expr extends MUAObject {
         ISNAME,
         READ,
         REPEAT,
+        ADD, SUB, MUL, DIV, MOD,
+        EQ, GT, LT,
+        AND, OR, NOT,
+
         FUNC,
         BASIC;
-
 
         @Override
         public String toString() {
@@ -31,6 +34,13 @@ abstract public class Expr extends MUAObject {
                 case READ: return "read";
                 case REPEAT: return "repeat";
                 case FUNC: return "func";
+                case ADD: return "add";
+                case SUB: return "sub";
+                case EQ: return "eq";
+                case GT: return "gt";
+                case AND: return "and";
+                case OR: return "or";
+                case NOT: return "not";
             }
             return "UNKNOWN";
         }
@@ -45,18 +55,23 @@ abstract public class Expr extends MUAObject {
     }
 
 
-    protected Expr(SubType subtype, ArrayList<MUAObject> arglist,
-                   ArrayList<MUAObject.Type> typelist) {
+    protected Expr(SubType subtype) {
         super(MUAObject.Type.EXPR);
         this.subtype = subtype;
-        this.arglist = arglist;
-        this.typelist = typelist;
     }
+
     public MUAObject eval(Scope scope) throws Exception {
         ArgUtil.evalAll(arglist, scope);
-        ArgUtil.argCheck(getName(), typelist, arglist);
+//        ArgUtil.argCheck(getName(), typelist, arglist);
         return new None();
     }
+
+    public void setArglist(ArrayList<MUAObject> arglist) {
+        this.arglist = arglist;
+    }
+
+    abstract public int getArgNum();
+
 
     @Override
     public Expr getValue() {
@@ -74,7 +89,7 @@ abstract public class Expr extends MUAObject {
 
 
     protected SubType subtype;
-    protected ArrayList<MUAObject> arglist;
-    protected ArrayList<MUAObject.Type> typelist;
+    protected ArrayList<MUAObject> arglist = new ArrayList<>();
+//    protected ArrayList<MUAObject.Type> typelist = new ArrayList<>();
 
 }

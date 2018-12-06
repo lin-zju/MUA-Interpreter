@@ -18,12 +18,12 @@ public class Interpreter {
         System.out.println("[MUA Interpreter | Zhixuan Lin]");
         System.out.println("[Welcome, and enjoy.]");
     }
-    public String getLine() throws Exception {
+    public static String getLine(boolean verbose) throws Exception {
         Scanner input = new Scanner(System.in);
-        promptOne();
+        promptOne(verbose);
         String line = getLineWithoutComment();
         while (line.trim().equals("")) {
-            promptOne();
+            promptOne(verbose);
             line = getLineWithoutComment();
         }
         while (true) {
@@ -40,7 +40,7 @@ public class Interpreter {
                 }
             }
             if (count != 0) {
-                promptTwo();
+                promptTwo(verbose);
                 String temp = getLineWithoutComment();
                 line += " " + temp;
                 continue;
@@ -83,7 +83,7 @@ public class Interpreter {
 
     public void next()  {
         try {
-            String line = getLine();
+            String line = getLine(true);
             evalLine(line);
         }
         catch (MUAError e) {
@@ -94,11 +94,13 @@ public class Interpreter {
         }
     }
 
-    public static void promptOne() {
-        System.out.print(pOne);
+    public static void promptOne(boolean verbose) {
+        if (verbose)
+            System.out.print(pOne);
     }
-    public static void promptTwo() {
-        System.out.print(pTwo);
+    public static void promptTwo(boolean verbose) {
+        if (verbose)
+            System.out.print(pTwo);
     }
 
 
