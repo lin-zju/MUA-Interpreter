@@ -18,8 +18,8 @@ public class Readlist extends Expr {
         ArgUtil.argCheck(getName(), argtypes, arglist);
         String line = Interpreter.getLine(false);
         ArrayList<String> tokens = ParserUtil.parseToken(line);
-        ArrayList<MUAObject> objlist = ParserUtil.parseObj(tokens);
-        return new List(objlist);
+//        ArrayList<MUAObject> objlist = ParserUtil.parseObj(tokens);
+        return new List(tokens);
     }
 
     final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(

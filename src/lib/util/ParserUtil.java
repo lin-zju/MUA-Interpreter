@@ -24,7 +24,7 @@ public class ParserUtil {
             return new Number(Double.parseDouble(str));
         }
         else if (str.startsWith("[") && str.endsWith("]")) {
-            ArrayList<MUAObject> content = parseObj(parseToken(str.substring(1, str.length() - 1)));
+            ArrayList<String> content = parseToken(str.substring(1, str.length() - 1));
             return new List(content);
         }
         else {
