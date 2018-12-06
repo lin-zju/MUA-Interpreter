@@ -1,5 +1,5 @@
 package lib;
-import lib.except.NameError;
+import lib.error.NameError;
 
 import java.util.HashMap;
 
@@ -33,24 +33,27 @@ public class Scope {
     }
 
     public void addName(Word name, MUAObject value) {
-        scope.put(name.toString(), value);
+        scope.put(name.getValue(), value);
     }
 
     public MUAObject getName(Word name) throws NameError {
-        MUAObject ret = scope.get(name.toString());
+        MUAObject ret = scope.get(name.getValue());
         if (ret == null) {
-            throw new NameError("name" + name.toString() + "not found");
+            throw new NameError("name '" + name.getValue() + "' not found");
         }
         return ret;
 
     }
 
     public void removeName(Word name) throws NameError {
-        MUAObject succeed = scope.remove(name.toString());
+        MUAObject succeed = scope.remove(name.getValue());
         if (succeed == null) {
-            throw new NameError("name" + name.toString() + "not found");
+            throw new NameError("name '" + name.getValue() + "' not found");
         }
+    }
 
+    public boolean hasName(Word name) {
+        return scope.containsKey(name.getValue());
     }
 
     private String scopeName = "global";

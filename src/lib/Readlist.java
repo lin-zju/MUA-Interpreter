@@ -1,6 +1,5 @@
 package lib;
 
-import lib.except.MUAExcept;
 import lib.util.ArgUtil;
 import lib.util.ParserUtil;
 
@@ -8,26 +7,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class Readlist extends Expression {
-    public Readlist(ArrayList<MUAObject> arglist) {
-        super(Type.READ, arglist);
+public class Readlist extends Expr {
+    public Readlist() {
+        super(SubType.READLIST);
     }
 
     @Override
-    public MUAObject eval(Scope scope) throws MUAExcept {
-        ArgUtil.argCheck(getName(), typelist, arglist);
-        Scanner input = new Scanner(System.in);
-        String line = input.nextLine();
-        while (line.trim().equals("")) {
-            line = input.nextLine();
-        }
-        ArrayList<MUAObject> content = new ArrayList<>();
-        for (String token: ParserUtil.parseToken(line)) {
-            content.add(ParserUtil.parseObj(token));
-        }
-        return new List(content);
+    public MUAObject eval(Scope scope) throws Exception {
+        super.eval(scope);
+        ArgUtil.argCheck(getName(), argtypes, arglist);
+        String line = Interpreter.getLine(false);
+        ArrayList<String> tokens = ParserUtil.parseToken(line);
+        ArrayList<MUAObject> objlist = ParserUtil.parseObj(tokens);
+        return new List(objlist);
     }
 
-    private ArrayList<MUAObject.Type> typelist = new ArrayList<MUAObject.Type>(Arrays.asList(
+    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
     ));
+    public int getArgNum() {
+        return argtypes.size();
+    }
 }
