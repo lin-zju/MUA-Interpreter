@@ -1,11 +1,18 @@
-package lib;
+package lib.operation;
 
+import lib.Expr;
+import lib.MUAObject;
+import lib.Number;
+import lib.Scope;
+import lib.Word;
+import lib.error.InputError;
 import lib.util.ArgUtil;
+import lib.util.Interpreter;
 import lib.util.ParserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
+
 
 public class Read extends Expr {
     public Read() {
@@ -18,7 +25,10 @@ public class Read extends Expr {
         ArgUtil.argCheck(getName(), argtypes, arglist);
         String line = Interpreter.getLine(false);
         ArrayList<String> tokens = ParserUtil.parseToken(line);
-        return ParserUtil.parseObj(tokens).get(0);
+        MUAObject obj =  ParserUtil.parseObj(tokens).get(0);
+        if (!(obj instanceof Word) && !(obj instanceof Number))
+            throw new InputError("input is not a number or word");
+        return obj;
     }
     @Override
     public String getName() {

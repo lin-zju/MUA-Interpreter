@@ -1,5 +1,6 @@
 package lib;
 
+import lib.error.SyntaxError;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
@@ -46,30 +47,39 @@ abstract public class Expr extends MUAObject {
         }
     }
 
-    public SubType getSubType() {
-        return subtype;
-    }
-
-    public String getName() {
-        return subtype.toString();
-    }
-
-
+    // ctor
     protected Expr(SubType subtype) {
         super(MUAObject.Type.EXPR);
         this.subtype = subtype;
     }
 
+    // get operation type
+    public SubType getSubType() {
+        return subtype;
+    }
+
+    // get operation name
+    public String getName() {
+        return subtype.toString();
+    }
+
+    // evaluation
     public MUAObject eval(Scope scope) throws Exception {
         ArgUtil.evalAll(arglist, scope);
-//        ArgUtil.argCheck(getName(), typelist, arglist);
+        for (MUAObject obj : arglist) {
+            if (obj.getType() == Type.NONE)
+                throw new SyntaxError("operation without a return value cannot be used as an argument");
+
+        }
         return new None();
     }
 
+    // argument list
     public void setArglist(ArrayList<MUAObject> arglist) {
         this.arglist = arglist;
     }
 
+    // correct argument count
     abstract public int getArgNum();
 
 
@@ -90,6 +100,5 @@ abstract public class Expr extends MUAObject {
 
     protected SubType subtype;
     protected ArrayList<MUAObject> arglist = new ArrayList<>();
-//    protected ArrayList<MUAObject.Type> typelist = new ArrayList<>();
 
 }

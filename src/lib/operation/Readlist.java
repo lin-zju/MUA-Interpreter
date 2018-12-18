@@ -1,11 +1,15 @@
-package lib;
+package lib.operation;
 
+import lib.Expr;
+import lib.List;
+import lib.MUAObject;
+import lib.Scope;
 import lib.util.ArgUtil;
+import lib.util.Interpreter;
 import lib.util.ParserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class Readlist extends Expr {
     public Readlist() {

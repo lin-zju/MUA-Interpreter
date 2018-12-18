@@ -1,8 +1,7 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.Expr;
 import lib.MUAObject;
-import lib.None;
 import lib.Scope;
 import lib.util.ArgUtil;
 import lib.Number;

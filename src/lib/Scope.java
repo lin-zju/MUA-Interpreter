@@ -9,16 +9,19 @@ public class Scope {
         FUNCTION
     }
 
+    // by default create a global scope
     public Scope() {
         this("global", Type.GLOBAL, null);
 
     }
 
+    // create a function scope
     public Scope(String name, Type type, Scope enclosing) {
         this.scopeName = name;
         this.scopeType = type;
         this.enclosingScope = enclosing;
     }
+
 
     public String getScopeName() {
         return scopeName;

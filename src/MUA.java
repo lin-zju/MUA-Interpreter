@@ -1,4 +1,4 @@
-import lib.Interpreter;
+import lib.util.Interpreter;
 public class MUA {
     public static void main(String[] args) {
         Interpreter interpreter = new Interpreter();

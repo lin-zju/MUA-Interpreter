@@ -1,5 +1,6 @@
-package lib;
+package lib.operation;
 
+import lib.*;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class Isname extends Expr {
         return new Bool(scope.hasName(obj));
     }
 
-    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
+    final static private ArrayList<Type> argtypes = new ArrayList<Type>(Arrays.asList(
             MUAObject.Type.WORD
     ));
     public int getArgNum() {

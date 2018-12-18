@@ -1,4 +1,4 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.Bool;
 import lib.Expr;
@@ -8,8 +8,8 @@ import lib.util.ArgUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Not extends Expr {
-    public Not() {
+public class And extends Expr {
+    public And() {
         super(SubType.ADD);
     }
 
@@ -18,11 +18,13 @@ public class Not extends Expr {
         super.eval(scope);
         ArgUtil.argCheck(getName(), argtypes, arglist);
         Bool a = (Bool) arglist.get(0);
-        return new Bool(!a.getValue());
+        Bool b = (Bool) arglist.get(1);
+        return new Bool(a.getValue() && b.getValue());
     }
 
 
     final static private ArrayList<Type> argtypes = new ArrayList<Type>(Arrays.asList(
+            Type.BOOL,
             Type.BOOL
     ));
 

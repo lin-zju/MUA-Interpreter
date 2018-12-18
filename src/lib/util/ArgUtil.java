@@ -4,6 +4,7 @@ import lib.Expr;
 import lib.MUAObject;
 import lib.Scope;
 import lib.error.ArgError;
+import lib.error.SyntaxError;
 import lib.error.TypeError;
 
 import java.util.ArrayList;
@@ -62,6 +63,7 @@ public class ArgUtil {
 
     public static void evalAll(ArrayList<MUAObject> arglist, Scope scope) throws Exception {
         for (int i = 0; i < arglist.size(); i++) {
+
             if (arglist.get(i).getType() == MUAObject.Type.EXPR) {
                 arglist.set(i, ((Expr) arglist.get(i)).eval(scope));
             }
