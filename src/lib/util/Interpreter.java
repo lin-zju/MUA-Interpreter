@@ -1,5 +1,8 @@
-package lib;
+package lib.util;
 
+import lib.Expr;
+import lib.MUAObject;
+import lib.Scope;
 import lib.error.MUAError;
 import lib.error.SyntaxError;
 
@@ -27,12 +30,17 @@ public class Interpreter {
             line = getLineWithoutComment();
         }
         while (true) {
+            boolean inWord = false;
             int count = 0;
             for (int i = 0; i < line.length(); i++) {
-                if (line.charAt(i) == '[') {
+                if (line.charAt(i) == '"')
+                    inWord = true;
+                else if (Character.isWhitespace(line.charAt(i)))
+                    inWord = false;
+                if (line.charAt(i) == '[' && !inWord) {
                     count++;
                 }
-                else if (line.charAt(i) == ']') {
+                else if (line.charAt(i) == ']' && !inWord) {
                     count--;
                 }
                 if (count < 0) {

@@ -1,8 +1,7 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.Expr;
 import lib.MUAObject;
-import lib.None;
 import lib.Scope;
 import lib.error.ArithmeticError;
 import lib.util.ArgUtil;
@@ -11,9 +10,9 @@ import lib.Number;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Div extends Expr {
-    public Div() {
-        super(SubType.DIV);
+public class Mod extends Expr {
+    public Mod() {
+        super(SubType.MOD);
     }
 
     @Override
@@ -24,7 +23,7 @@ public class Div extends Expr {
         Number b = (Number) arglist.get(1);
         if (b.getValue() < 1e-7)
             throw new ArithmeticError("Divide by zero");
-        return new Number(a.getValue() / b.getValue());
+        return new Number(a.getValue() % b.getValue());
     }
 
 

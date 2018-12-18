@@ -3,7 +3,8 @@ package lib.util;
 import lib.Number;
 import lib.error.SyntaxError;
 import lib.*;
-import lib.operator.*;
+import lib.operation.*;
+import lib.operation.operator.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -11,7 +12,9 @@ import java.util.HashMap;
 
 public class ParserUtil {
     public static MUAObject parseBasicObj(String str) throws Exception {
-        if (str.startsWith("\"") && str.length() > 1) {
+        if (str.startsWith("\"")) {
+            if (str.length() == 1)
+                throw new SyntaxError("empty word body");
             return new Word(str.substring(1));
         }
         else if (str.equals("false")) {
@@ -20,11 +23,17 @@ public class ParserUtil {
         else if (str.equals("true")) {
             return new Bool(true);
         }
-        else if (Character.isDigit(str.charAt(0))) {
-            return new Number(Double.parseDouble(str));
+        else if (Character.isDigit(str.charAt(0)) || str.charAt(0) == '-') {
+            try {
+                return new Number(Double.parseDouble(str));
+            }
+            catch (NumberFormatException e){
+                throw new SyntaxError("invalid number literal: '" + str + "'");
+
+            }
         }
         else if (str.startsWith("[") && str.endsWith("]")) {
-            ArrayList<MUAObject> content = parseObj(parseToken(str.substring(1, str.length() - 1)));
+            ArrayList<String> content = parseToken(str.substring(1, str.length() - 1));
             return new List(content);
         }
         else {

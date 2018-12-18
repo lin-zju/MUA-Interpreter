@@ -1,4 +1,4 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.Bool;
 import lib.Expr;

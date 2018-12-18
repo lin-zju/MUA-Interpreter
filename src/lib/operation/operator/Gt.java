@@ -1,7 +1,8 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.*;
 import lib.Number;
+import lib.Bool;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;

@@ -1,19 +1,17 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.Expr;
 import lib.MUAObject;
-import lib.None;
 import lib.Scope;
-import lib.error.ArithmeticError;
 import lib.util.ArgUtil;
 import lib.Number;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Mod extends Expr {
-    public Mod() {
-        super(SubType.MOD);
+public class Add extends Expr {
+    public Add() {
+        super(SubType.ADD);
     }
 
     @Override
@@ -22,9 +20,7 @@ public class Mod extends Expr {
         ArgUtil.argCheck(getName(), argtypes, arglist);
         Number a = (Number) arglist.get(0);
         Number b = (Number) arglist.get(1);
-        if (b.getValue() < 1e-7)
-            throw new ArithmeticError("Divide by zero");
-        return new Number(a.getValue() % b.getValue());
+        return new Number(a.getValue() + b.getValue());
     }
 
 

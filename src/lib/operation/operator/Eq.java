@@ -1,15 +1,16 @@
-package lib.operator;
+package lib.operation.operator;
 
 import lib.*;
 import lib.Number;
+import lib.Bool;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Lt extends Expr {
-    public Lt() {
-        super(SubType.LT);
+public class Eq extends Expr {
+    public Eq() {
+        super(SubType.EQ);
     }
 
     @Override
@@ -19,19 +20,19 @@ public class Lt extends Expr {
         if (i == 0) {
             Number a = (Number) arglist.get(0);
             Number b = (Number) arglist.get(1);
-            return new Bool(a.getValue() < (b.getValue()));
+            return new Bool(a.getValue().equals(b.getValue()));
         }
         else {
             Word a = (Word) arglist.get(0);
             Word b = (Word) arglist.get(1);
-            return new Bool(a.getValue().compareTo(b.getValue()) < 0);
+            return new Bool(a.getValue().equals(b.getValue()));
         }
     }
 
 
     final static private ArrayList[] argtypes = new ArrayList[]{
-            new ArrayList<Type>(Arrays.asList(Type.NUMBER, Type.NUMBER)),
-            new ArrayList<Type>(Arrays.asList(Type.WORD, Type.WORD))
+            new ArrayList<MUAObject.Type>(Arrays.asList(Type.NUMBER, Type.NUMBER)),
+            new ArrayList<MUAObject.Type>(Arrays.asList(Type.WORD, Type.WORD))
     };
 
     public int getArgNum() {

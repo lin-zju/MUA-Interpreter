@@ -1,5 +1,7 @@
 package lib;
 
+import lib.MUAObject;
+
 public class Bool extends MUAObject {
     // ctor
     public Bool(boolean b) {

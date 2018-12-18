@@ -1,5 +1,7 @@
 package lib;
 
+import lib.error.SyntaxError;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -10,8 +12,8 @@ public class Func extends Expr {
 
     @Override
     public None eval(Scope scope) throws Exception {
-        System.out.println("function not implemented");
-        return new None();
+        throw new SyntaxError("function not yet implemented");
+//        return new None();
     }
 
 

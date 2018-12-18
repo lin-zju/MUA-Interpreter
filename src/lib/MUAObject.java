@@ -18,23 +18,27 @@ abstract public class MUAObject {
                 case LIST: return "list";
                 case BOOL: return "bool";
                 case EXPR: return "expr";
+                case NONE: return "none";
             }
             return "UNKNOWN";
         }
     }
 
-    private Type type;
-
+    // constructor
     protected MUAObject(Type type) {
         this.type = type;
     }
+    // get object type
     public Type getType() {
         return type;
     }
-
+    // get object value
+    abstract public Object getValue();
+    // string representation
     @Override
     abstract public String toString();
 
-    abstract public Object getValue();
+
+    private Type type;
 
 }
