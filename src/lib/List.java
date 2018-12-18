@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class List extends MUAObject {
     public List(ArrayList<String> list) {
-        super(Type.LIST);
         this.value = list;
     }
 
@@ -17,6 +16,11 @@ public class List extends MUAObject {
 //            first = false;
 //        }
         return String.join(" ", value);
+    }
+
+    @Override
+    public String getTypeString() {
+        return "list";
     }
 
     @Override

@@ -9,21 +9,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Not extends Expr {
-    public Not() {
-        super(SubType.ADD);
+
+    @Override
+    public String getOpName() {
+        return "not";
     }
 
     @Override
     public Bool eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Bool a = (Bool) arglist.get(0);
         return new Bool(!a.getValue());
     }
 
 
-    final static private ArrayList<Type> argtypes = new ArrayList<Type>(Arrays.asList(
-            Type.BOOL
+    final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
+            Bool.class
     ));
 
     public int getArgNum() {

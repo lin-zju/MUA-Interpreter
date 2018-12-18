@@ -18,14 +18,18 @@ public class ParserUtil {
             return new Word(str.substring(1));
         }
         else if (str.equals("false")) {
-            return new Bool(false);
+//            return new Bool(false);
+            return new Word(str);
         }
         else if (str.equals("true")) {
-            return new Bool(true);
+//            return new Bool(true);
+            return new Word(str);
         }
+
         else if (Character.isDigit(str.charAt(0)) || str.charAt(0) == '-') {
             try {
-                return new Number(Double.parseDouble(str));
+                Number test =  new Number(Double.parseDouble(str));
+                return new Word(str);
             }
             catch (NumberFormatException e){
                 throw new SyntaxError("invalid number literal: '" + str + "'");

@@ -9,14 +9,16 @@ import java.util.Arrays;
 
 public class Make extends Expr {
 
-    public Make() {
-        super(SubType.MAKE);
+
+    @Override
+    public String getOpName() {
+        return "make";
     }
 
     @Override
     public None eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Word word = (Word) arglist.get(0);
         if (!Character.isLetter(word.getValue().charAt(0)))
             throw new SyntaxError("<word> in make must start with a letter");
@@ -26,9 +28,9 @@ public class Make extends Expr {
     }
 
 
-    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
-            MUAObject.Type.WORD,
-            MUAObject.Type.ANY
+    final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
+            Word.class,
+            MUAObject.class
     ));
 
     public int getArgNum() {

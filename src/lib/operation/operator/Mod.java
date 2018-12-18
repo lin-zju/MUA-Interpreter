@@ -11,14 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Mod extends Expr {
-    public Mod() {
-        super(SubType.MOD);
+    @Override
+    public String getOpName() {
+        return "gt";
     }
 
     @Override
     public Number eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Number a = (Number) arglist.get(0);
         Number b = (Number) arglist.get(1);
         if (b.getValue() < 1e-7)
@@ -26,10 +27,9 @@ public class Mod extends Expr {
         return new Number(a.getValue() % b.getValue());
     }
 
-
-    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
-            MUAObject.Type.NUMBER,
-            MUAObject.Type.NUMBER
+    final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
+            Number.class,
+            Number.class
     ));
 
     public int getArgNum() {

@@ -7,7 +7,6 @@ import java.util.Arrays;
 
 public class Func extends Expr {
     public Func() {
-        super(SubType.FUNC);
     }
 
     @Override
@@ -18,16 +17,15 @@ public class Func extends Expr {
 
 
     @Override
-    public String getName() {
+    public String getOpName() {
         return "func";
     }
 
-    final static private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
-    ));
 
     @Override
     public int getArgNum() {
         return argtypes.size();
     }
-
+    final static private ArrayList<Class> argtypes = new ArrayList<>(Arrays.asList(
+    ));
 }

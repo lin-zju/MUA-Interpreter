@@ -15,14 +15,11 @@ import java.util.Arrays;
 
 
 public class Read extends Expr {
-    public Read() {
-        super(SubType.READ);
-    }
 
     @Override
     public MUAObject eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
         String line = Interpreter.getLine(false);
         ArrayList<String> tokens = ParserUtil.parseToken(line);
         MUAObject obj =  ParserUtil.parseObj(tokens).get(0);
@@ -31,11 +28,11 @@ public class Read extends Expr {
         return obj;
     }
     @Override
-    public String getName() {
-        return "func";
+    public String getOpName() {
+        return "read";
     }
 
-    static final private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
+    static final private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
     ));
     public int getArgNum() {
         return argtypes.size();

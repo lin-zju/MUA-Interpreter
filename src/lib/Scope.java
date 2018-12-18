@@ -40,7 +40,7 @@ public class Scope {
     }
 
     public MUAObject getName(Word name) throws NameError {
-        MUAObject ret = scope.get(name.getValue());
+        MUAObject ret = scope.get(name.toString());
         if (ret == null) {
             throw new NameError("name '" + name.getValue() + "' not found");
         }

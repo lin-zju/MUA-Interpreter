@@ -1,8 +1,6 @@
 package lib.util;
 
-import lib.Expr;
-import lib.MUAObject;
-import lib.Scope;
+import lib.*;
 import lib.error.MUAError;
 import lib.error.SyntaxError;
 
@@ -68,14 +66,14 @@ public class Interpreter {
         }
         else {
             MUAObject obj = objlist.get(0);
-            if (obj.getType() != MUAObject.Type.EXPR) {
-                System.out.println(obj);
-            }
-            else {
+            if (obj instanceof Expr) {
                 MUAObject ret = ((Expr)obj).eval(global);
-                if (ret.getType() != MUAObject.Type.NONE) {
+                if (! (ret instanceof None)) {
                     System.out.println(ret);
                 }
+            }
+            else {
+                System.out.println(obj);
             }
         }
     }

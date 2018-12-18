@@ -8,22 +8,23 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class Erase extends Expr {
-    public Erase() {
-        super(SubType.ERASE);
-    }
 
+    @Override
+    public String getOpName() {
+        return "erase";
+    }
 
     @Override
     public None eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Word word = (Word) arglist.get(0);
         scope.removeName(word);
         return new None();
     }
 
-    final static private ArrayList<Type> argtypes = new ArrayList<Type>(Arrays.asList(
-            MUAObject.Type.WORD
+    final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
+            Word.class
     ));
 
     @Override
