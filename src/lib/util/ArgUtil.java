@@ -3,7 +3,6 @@ package lib.util;
 import lib.*;
 import lib.Number;
 import lib.error.ArgError;
-import lib.error.SyntaxError;
 import lib.error.TypeError;
 
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class ArgUtil {
 
 
         for (int i = 0; i < arglist.size(); i++) {
-            MUAObject o = narrowDown(typelist.get(i), arglist.get(i));
+            MUAObject o = typeCast(typelist.get(i), arglist.get(i));
             if (o != null) {
                 arglist.set(i, o);
             }
@@ -43,7 +42,7 @@ public class ArgUtil {
         }
     }
 
-    private static MUAObject narrowDown(Class c, MUAObject o) {
+    private static MUAObject typeCast(Class c, MUAObject o) {
         if (o instanceof Word) {
             if (c == Number.class) {
                 return ((Word) o).toNumber();
@@ -52,8 +51,18 @@ public class ArgUtil {
                 return ((Word) o).toBool();
             }
         }
+
+        if (c == Word.class) {
+            if (o instanceof Number) {
+                return new Word(o.toString());
+            }
+            else if (o instanceof Bool) {
+                return new Word(o.toString());
+            }
+        }
         return null;
     }
+
 //
 //    public static int argCheck(String name,
 //                                ArrayList<MUAObject.Type>[] typelists,

@@ -1,6 +1,13 @@
 package lib;
 
 public class Word extends MUAObject {
+    public Word(double d) {
+        this.value = Double.toString(d);
+    }
+
+    public Word(boolean b) {
+        this.value = Boolean.toString(b);
+    }
     public Word(String str) {
         this.value = str;
     }
