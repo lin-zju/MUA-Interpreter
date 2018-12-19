@@ -12,6 +12,7 @@ import lib.util.ParserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Read extends Expr {
@@ -20,12 +21,14 @@ public class Read extends Expr {
     public MUAObject eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
-        String line = Interpreter.getLine(false);
-        ArrayList<String> tokens = ParserUtil.parseToken(line);
-        MUAObject obj =  ParserUtil.parseObj(tokens).get(0);
-        if (!(obj instanceof Word) && !(obj instanceof Number))
-            throw new InputError("input is not a number or word");
-        return obj;
+        Scanner input = new Scanner(System.in);
+        String token = input.next();
+//        String line = Interpreter.getLine(false);
+//        ArrayList<String> tokens = ParserUtil.parseToken(line);
+//        MUAObject obj =  ParserUtil.parseObj(tokens, scope).get(0);
+//        if (!(obj instanceof Word) && !(obj instanceof Number))
+//            throw new InputError("input is not a number or word");
+        return new Word(token);
     }
     @Override
     public String getOpName() {

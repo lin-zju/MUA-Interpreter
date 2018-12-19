@@ -14,11 +14,11 @@ public class Isname extends Expr {
     }
 
     @Override
-    public Bool eval(Scope scope) throws Exception {
+    public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Word obj = (Word)arglist.get(0);
-        return new Bool(scope.hasName(obj));
+        return new Word(scope.hasName(obj));
     }
 
     final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(

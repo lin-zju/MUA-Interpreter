@@ -16,7 +16,7 @@ public class Gt extends Expr {
     }
 
     @Override
-    public Bool eval(Scope scope) throws Exception {
+    public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
         MUAObject x = arglist.get(0);
@@ -24,12 +24,12 @@ public class Gt extends Expr {
         if (x instanceof Number && y instanceof Number) {
             Number a = (Number) x;
             Number b = (Number) y;
-            return new Bool(a.getValue() > (b.getValue()));
+            return new Word(a.getValue() > (b.getValue()));
         }
         else {
             Word a = (Word) x;
             Word b = (Word) y;
-            return new Bool(a.toString().compareTo(b.toString()) > 0);
+            return new Word(a.toString().compareTo(b.toString()) > 0);
         }
     }
 

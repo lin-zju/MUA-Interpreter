@@ -42,7 +42,7 @@ public class ArgUtil {
         }
     }
 
-    private static MUAObject typeCast(Class c, MUAObject o) {
+    public static MUAObject typeCast(Class c, MUAObject o) {
         if (o instanceof Word) {
             if (c == Number.class) {
                 return ((Word) o).toNumber();

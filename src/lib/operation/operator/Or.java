@@ -3,6 +3,7 @@ package lib.operation.operator;
 import lib.Bool;
 import lib.Expr;
 import lib.Scope;
+import lib.Word;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ public class Or extends Expr {
     }
 
     @Override
-    public Bool eval(Scope scope) throws Exception {
+    public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Bool a = (Bool) arglist.get(0);
         Bool b = (Bool) arglist.get(1);
-        return new Bool(a.getValue() || b.getValue());
+        return new Word(a.getValue() || b.getValue());
     }
 
 

@@ -3,7 +3,7 @@ package lib;
 import java.util.ArrayList;
 
 public class List extends MUAObject {
-    public List(ArrayList<String> list) {
+    public List(ArrayList<MUAObject> list) {
         this.value = list;
     }
 
@@ -11,11 +11,12 @@ public class List extends MUAObject {
     public String toString() {
         String content = "";
         boolean first = true;
-//        for (MUAObject v: value) {
-//            content += (first ? "" : " ") + v.toString();
-//            first = false;
-//        }
-        return String.join(" ", value);
+        for (MUAObject v: value) {
+            content += (first ? "" : " ") + v.toString();
+            first = false;
+        }
+//        return String.join(" ", value);
+        return "[" + content + "]";
     }
 
     @Override
@@ -24,9 +25,9 @@ public class List extends MUAObject {
     }
 
     @Override
-    public Object getValue() {
+    public ArrayList<MUAObject> getValue() {
         return value;
     }
 
-    private ArrayList<String> value;
+    private ArrayList<MUAObject> value;
 }

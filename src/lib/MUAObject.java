@@ -32,4 +32,5 @@ abstract public class MUAObject {
     // string representation
     @Override
     abstract public String toString();
+    public Scope enclosingScope = null;
 }

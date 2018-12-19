@@ -24,6 +24,8 @@ public class Make extends Expr {
             throw new SyntaxError("<word> in make must start with a letter");
         MUAObject value = arglist.get(1);
         scope.addName(word, value);
+        // function enclosing scope
+
         return new None();
     }
 

@@ -15,12 +15,12 @@ public class Add extends Expr {
     }
 
     @Override
-    public Number eval(Scope scope) throws Exception {
+    public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Number a = (Number) arglist.get(0);
         Number b = (Number) arglist.get(1);
-        return new Number(a.getValue() + b.getValue());
+        return new Word(a.getValue() + b.getValue());
     }
 
 
