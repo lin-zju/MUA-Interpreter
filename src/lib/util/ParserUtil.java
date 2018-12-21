@@ -71,11 +71,17 @@ public class ParserUtil {
         if (obj != null) {
             objlist.add(0, obj);
         }
-        else if (keywordToClass.containsKey(token)){
-            c = keywordToClass.get(token);
-            Constructor ctor = c.getConstructor();
-            Expr expr = (Expr) ctor.newInstance();
-            int argNum = (int) c.getMethod("getArgNum").invoke(expr);
+        else {
+            MUAObject o = scope.getName(new Word(token));
+            Expr expr;
+
+            if (o instanceof Expr) {
+                expr = (Expr) o;
+            }
+            else {
+                expr = new Func(token, scope);
+            }
+            int argNum = expr.getArgNum();
             ArrayList<MUAObject> arglist = new ArrayList<>();
             for (int i = 0; i < argNum; i++) {
                 if (!objlist.isEmpty()) {
@@ -84,19 +90,6 @@ public class ParserUtil {
             }
             expr.setArglist(arglist);
             objlist.add(0, expr);
-        }
-        else {
-            c = Func.class;
-            Func func = new Func(token, scope);
-            int argNum = func.getArgNum();
-            ArrayList<MUAObject> arglist = new ArrayList<>();
-            for (int i = 0; i < argNum; i++) {
-                if (!objlist.isEmpty()) {
-                    arglist.add(objlist.remove(0));
-                }
-            }
-            func.setArglist(arglist);
-            objlist.add(0, func);
         }
     }
 
@@ -135,14 +128,14 @@ public class ParserUtil {
                     prefix += "[";
                 }
                 String suffix = "]";
-                while (item.endsWith(suffix))
+                while (item.endsWith(suffix) && count > 0)
                 {
                     count--;
                     suffix += "]";
                 }
                 temp.add(item);
-                if (count < 0) {
-                    throw new SyntaxError("Unpaired ']'");
+                if (count > 0) {
+                    throw new SyntaxError("Unpaired '['");
                 }
                 else if (count == 0) {
                     tokens.add(String.join(" ", temp));

@@ -3,6 +3,8 @@ package lib.util;
 import lib.*;
 import lib.error.MUAError;
 import lib.error.SyntaxError;
+import lib.operation.*;
+import lib.operation.operator.*;
 
 import static lib.util.ParserUtil.parseObj;
 import static lib.util.ParserUtil.parseToken;
@@ -16,6 +18,39 @@ public class Interpreter {
     public final static String pTwo = "... ";
     public Interpreter() {
         this.global = new Scope();
+        // put operations into global scope
+        global.addName(new Word("make"), new Make());
+        global.addName(new Word("erase"), new Erase());
+        global.addName(new Word("print"), new Print());
+        global.addName(new Word("readlist"), new Readlist());
+        global.addName(new Word(":"), new Thing());
+        global.addName(new Word("thing"), new Thing());
+        global.addName(new Word("isname"), new Isname());
+        global.addName(new Word("read"), new Read());
+        global.addName(new Word("add"), new Add());
+        global.addName(new Word("sub"), new Sub());
+        global.addName(new Word("mul"), new Mul());
+        global.addName(new Word("div"), new Div());
+        global.addName(new Word("mod"), new Mod());
+        global.addName(new Word("eq"), new Eq());
+        global.addName(new Word("gt"), new Gt());
+        global.addName(new Word("lt"), new Lt());
+        global.addName(new Word("and"), new And());
+        global.addName(new Word("or"), new Or());
+        global.addName(new Word("not"), new Not());
+        global.addName(new Word("repeat"), new Repeat());
+        global.addName(new Word("output"), new Output());
+        global.addName(new Word("stop"), new Stop());
+        global.addName(new Word("export"), new Export());
+        global.addName(new Word("isnumber"), new Isnumber());
+        global.addName(new Word("isword"), new Isword());
+        global.addName(new Word("islist"), new Islist());
+        global.addName(new Word("isbool"), new Isbool());
+        global.addName(new Word("isempty"), new Isempty());
+        global.addName(new Word("random"), new Random());
+        global.addName(new Word("sqrt"), new Sqrt());
+        global.addName(new Word("int"), new Int());
+
         System.out.println("[MUA Interpreter | Zhixuan Lin]");
         System.out.println("[Welcome, and enjoy.]");
     }
