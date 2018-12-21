@@ -57,7 +57,11 @@ public class Scope {
 
     public void removeName(Word name) throws NameError {
         MUAObject succeed = scope.remove(name.getValue());
+        // remove global
         if (succeed == null) {
+            if (enclosingScope != null) {
+                enclosingScope.removeName(name);
+            }
             throw new NameError("name '" + name.getValue() + "' not found");
         }
     }

@@ -27,7 +27,7 @@ public class Readlist extends Expr {
         String line = input.nextLine();
 //        ArrayList<String> tokens = ParserUtil.parseToken(line);
 //        ArrayList<MUAObject> objlist = ParserUtil.parseObj(tokens);
-        return parseBasicObj("[ " + line + " +]");
+        return parseBasicObj("[ " + line + " ]");
     }
 
     final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
