@@ -1,8 +1,6 @@
 package lib.util;
 
-import lib.Expr;
-import lib.MUAObject;
-import lib.Scope;
+import lib.*;
 import lib.error.MUAError;
 import lib.error.SyntaxError;
 
@@ -35,7 +33,8 @@ public class Interpreter {
             for (int i = 0; i < line.length(); i++) {
                 if (line.charAt(i) == '"')
                     inWord = true;
-                else if (Character.isWhitespace(line.charAt(i)))
+                else if (Character.isWhitespace(line.charAt(i))
+                    || (count > 0 && line.charAt(i) == ']'))
                     inWord = false;
                 if (line.charAt(i) == '[' && !inWord) {
                     count++;
@@ -62,20 +61,20 @@ public class Interpreter {
 
     public void evalLine(String line) throws Exception {
         ArrayList<String> tokens = parseToken(line);
-        ArrayList<MUAObject> objlist = parseObj(tokens);
+        ArrayList<MUAObject> objlist = parseObj(tokens, global);
         if (objlist.size() != 1) {
             throw new SyntaxError("Invalid syntax: more than one object per line");
         }
         else {
             MUAObject obj = objlist.get(0);
-            if (obj.getType() != MUAObject.Type.EXPR) {
-                System.out.println(obj);
-            }
-            else {
+            if (obj instanceof Expr) {
                 MUAObject ret = ((Expr)obj).eval(global);
-                if (ret.getType() != MUAObject.Type.NONE) {
+                if (! (ret instanceof None)) {
                     System.out.println(ret);
                 }
+            }
+            else {
+                System.out.println(obj);
             }
         }
     }

@@ -1,36 +1,38 @@
-package lib.operation.operator;
+package lib.operation;
 
-import lib.Bool;
-import lib.Expr;
-import lib.Scope;
-import lib.Word;
+import lib.*;
 import lib.util.ArgUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class And extends Expr {
+public class Isempty extends Expr {
     @Override
     public String getOpName() {
-        return "and";
+        return "isempty";
     }
 
     @Override
     public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
-        Bool a = (Bool) arglist.get(0);
-        Bool b = (Bool) arglist.get(1);
-        return new Word(a.getValue() && b.getValue());
+        MUAObject obj = arglist.get(0);
+        if (obj instanceof Word) {
+            return new Word(((Word)obj).getValue().equals(""));
+        }
+        else
+            return new Word(((List) obj).getValue().size() == 0);
     }
 
 
     final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
-            Bool.class,
-            Bool.class
+            MUAObject.class
     ));
 
     public int getArgNum() {
         return argtypes.size();
     }
+
+
 }
+

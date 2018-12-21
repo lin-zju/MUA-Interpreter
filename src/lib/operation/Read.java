@@ -12,30 +12,30 @@ import lib.util.ParserUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Scanner;
 
 
 public class Read extends Expr {
-    public Read() {
-        super(SubType.READ);
-    }
 
     @Override
     public MUAObject eval(Scope scope) throws Exception {
         super.eval(scope);
-        ArgUtil.argCheck(getName(), argtypes, arglist);
-        String line = Interpreter.getLine(false);
-        ArrayList<String> tokens = ParserUtil.parseToken(line);
-        MUAObject obj =  ParserUtil.parseObj(tokens).get(0);
-        if (!(obj instanceof Word) && !(obj instanceof Number))
-            throw new InputError("input is not a number or word");
-        return obj;
+        ArgUtil.argCheck(getOpName(), argtypes, arglist);
+        Scanner input = new Scanner(System.in);
+        String token = input.next();
+//        String line = Interpreter.getLine(false);
+//        ArrayList<String> tokens = ParserUtil.parseToken(line);
+//        MUAObject obj =  ParserUtil.parseObj(tokens, scope).get(0);
+//        if (!(obj instanceof Word) && !(obj instanceof Number))
+//            throw new InputError("input is not a number or word");
+        return new Word(token);
     }
     @Override
-    public String getName() {
-        return "func";
+    public String getOpName() {
+        return "read";
     }
 
-    static final private ArrayList<MUAObject.Type> argtypes = new ArrayList<MUAObject.Type>(Arrays.asList(
+    static final private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
     ));
     public int getArgNum() {
         return argtypes.size();

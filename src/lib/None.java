@@ -4,7 +4,11 @@ package lib;
 public class None extends MUAObject {
     // ctor
     public None() {
-        super(MUAObject.Type.NONE);
+    }
+
+    @Override
+    public String getTypeString() {
+        return "none";
     }
 
     @Override

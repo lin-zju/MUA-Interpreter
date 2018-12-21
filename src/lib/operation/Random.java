@@ -1,33 +1,31 @@
-package lib.operation.operator;
+package lib.operation;
 
-import lib.Bool;
-import lib.Expr;
-import lib.Scope;
-import lib.Word;
+import lib.*;
 import lib.util.ArgUtil;
 
+import lib.Number;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class And extends Expr {
+public class Random extends Expr {
     @Override
     public String getOpName() {
-        return "and";
+        return "random";
     }
 
     @Override
     public Word eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
-        Bool a = (Bool) arglist.get(0);
-        Bool b = (Bool) arglist.get(1);
-        return new Word(a.getValue() && b.getValue());
+        MUAObject obj = (MUAObject) arglist.get(0);
+        int bound = (int) Math.floor(((Number)obj).getValue());
+        java.util.Random r = new java.util.Random();
+        return new Word(r.nextInt(bound));
     }
 
 
     final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
-            Bool.class,
-            Bool.class
+            Number.class
     ));
 
     public int getArgNum() {

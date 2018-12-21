@@ -1,35 +1,38 @@
 package lib.operation;
 
 import lib.*;
-import lib.util.ArgUtil;
+import lib.Number;
+import lib.util.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import static lib.util.RunUtil.runList;
 
-public class Print extends Expr {
-
+public class Repeat extends Expr {
     @Override
     public String getOpName() {
-        return "print";
+        return "repeat";
     }
 
     @Override
     public None eval(Scope scope) throws Exception {
         super.eval(scope);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
-        MUAObject obj = arglist.get(0);
-//        if (obj instanceof Word)
-//            System.out.println(obj);
-//        else
-        System.out.println(obj);
+        Number n = (Number)arglist.get(0);
+        List l = (List)arglist.get(1);
+        for (int i = 0; i < n.getValue(); i++) {
+            runList(scope, l);
+        }
         return new None();
-
     }
 
     final static private ArrayList<Class> argtypes = new ArrayList<Class>(Arrays.asList(
-            MUAObject.class
+            Number.class,
+            List.class
     ));
+
     public int getArgNum() {
         return argtypes.size();
+
     }
 }

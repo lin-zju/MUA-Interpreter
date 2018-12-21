@@ -8,24 +8,29 @@ import lib.operation.operator.*;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class ParserUtil {
     public static MUAObject parseBasicObj(String str) throws Exception {
         if (str.startsWith("\"")) {
-            if (str.length() == 1)
-                throw new SyntaxError("empty word body");
+//            if (str.length() == 1)
+//                throw new SyntaxError("empty word body");
             return new Word(str.substring(1));
         }
         else if (str.equals("false")) {
-            return new Bool(false);
+//            return new Bool(false);
+            return new Word(str);
         }
         else if (str.equals("true")) {
-            return new Bool(true);
+//            return new Bool(true);
+            return new Word(str);
         }
+
         else if (Character.isDigit(str.charAt(0)) || str.charAt(0) == '-') {
             try {
-                return new Number(Double.parseDouble(str));
+                Number test =  new Number(Double.parseDouble(str));
+                return new Word(str);
             }
             catch (NumberFormatException e){
                 throw new SyntaxError("invalid number literal: '" + str + "'");
@@ -34,22 +39,33 @@ public class ParserUtil {
         }
         else if (str.startsWith("[") && str.endsWith("]")) {
             ArrayList<String> content = parseToken(str.substring(1, str.length() - 1));
-            return new List(content);
+            ArrayList<MUAObject> objlist = new ArrayList<>();
+            for (String token : content) {
+                if (token.startsWith("[") && token.endsWith("]")) {
+                    objlist.add(parseBasicObj(token));
+                }
+                else {
+                    objlist.add(new Word(token));
+                }
+
+            }
+            return new List(objlist);
         }
         else {
             return null;
         }
     }
 
-    public static ArrayList<MUAObject> parseObj(ArrayList<String> tokens) throws Exception {
+    public static ArrayList<MUAObject> parseObj(ArrayList<String> tokens, Scope scope) throws Exception {
         ArrayList<MUAObject> objlist = new ArrayList<>();
         for (int i = tokens.size() - 1; i >= 0; i--) {
-            reduce(tokens.get(i), objlist);
+            reduce(tokens.get(i), objlist, scope);
         }
         return objlist;
     }
 
-    public static void reduce(String token, ArrayList<MUAObject> objlist) throws Exception {
+
+    public static void reduce(String token, ArrayList<MUAObject> objlist, Scope scope) throws Exception {
         MUAObject obj = parseBasicObj(token);
         Class c = null;
         if (obj != null) {
@@ -71,7 +87,16 @@ public class ParserUtil {
         }
         else {
             c = Func.class;
-            objlist.add(new Func());
+            Func func = new Func(token, scope);
+            int argNum = func.getArgNum();
+            ArrayList<MUAObject> arglist = new ArrayList<>();
+            for (int i = 0; i < argNum; i++) {
+                if (!objlist.isEmpty()) {
+                    arglist.add(objlist.remove(0));
+                }
+            }
+            func.setArglist(arglist);
+            objlist.add(0, func);
         }
     }
 
@@ -80,10 +105,12 @@ public class ParserUtil {
         ArrayList<String> tokens = new ArrayList<>();
         if (str.trim().equals(""))
             return tokens;
-        String[] items = str.trim().split("\\s+");
+        String[] itemStr = str.trim().split("\\s+");
+        ArrayList<String> items = new ArrayList<>(Arrays.asList(itemStr));
         int count = 0;
         ArrayList<String> temp = new ArrayList<>();
-        for (String item: items) {
+        for (int i = 0; i < items.size(); i++) {
+            String item = items.get(i);
             if (!item.startsWith("[") && !item.endsWith("]") && !item.startsWith(":")) {
                 if (count == 0)
                     tokens.add(item);
@@ -91,9 +118,14 @@ public class ParserUtil {
                     temp.add(item);
             }
             else if (item.startsWith(":")) {
-                tokens.add("thing");
-                if (item.length() > 1)
-                    tokens.add("\"" + item.substring(1));
+                if (count == 0)
+                    tokens.add("thing");
+                else
+                    temp.add("thing");
+                if (item.length() > 1) {
+                    items.set(i, "\"" + item.substring(1));
+                    i--;
+                }
             }
             else
             {
@@ -126,6 +158,7 @@ public class ParserUtil {
     }
 
 
+
     private static final HashMap<String, Class> keywordToClass = new HashMap<>();
     static {
         keywordToClass.put("make", Make.class);
@@ -147,6 +180,18 @@ public class ParserUtil {
         keywordToClass.put("and", And.class);
         keywordToClass.put("or", Or.class);
         keywordToClass.put("not", Not.class);
+        keywordToClass.put("repeat", Repeat.class);
+        keywordToClass.put("output", Output.class);
+        keywordToClass.put("stop", Stop.class);
+        keywordToClass.put("export", Export.class);
+        keywordToClass.put("isnumber", Isnumber.class);
+        keywordToClass.put("isword", Isword.class);
+        keywordToClass.put("islist", Islist.class);
+        keywordToClass.put("isbool", Isbool.class);
+        keywordToClass.put("isempty", Isempty.class);
+        keywordToClass.put("random", Random.class);
+        keywordToClass.put("sqrt", Sqrt.class);
+        keywordToClass.put("int", Int.class);
 
     }
 }

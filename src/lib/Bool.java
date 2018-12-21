@@ -5,8 +5,12 @@ import lib.MUAObject;
 public class Bool extends MUAObject {
     // ctor
     public Bool(boolean b) {
-        super(MUAObject.Type.BOOL);
         this.value = b;
+    }
+
+    @Override
+    public String getTypeString() {
+        return "bool";
     }
 
     @Override
