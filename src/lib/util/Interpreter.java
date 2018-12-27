@@ -1,6 +1,7 @@
 package lib.util;
 
 import lib.*;
+import lib.Number;
 import lib.error.MuaError;
 import lib.error.SyntaxError;
 import lib.operation.*;
@@ -20,48 +21,56 @@ public class Interpreter {
     public final static String pOne = ">>> ";
     public final static String pTwo = "... ";
     public Interpreter(boolean verbose) {
-        this.global = new Scope();
+        this.builtin = new Scope("builtin", Scope.Type.BUILTIN, null);
+        this.global = new Scope("global", Scope.Type.GLOBAL, builtin);
         // put operations into global scope
-        global.addName(new Word("make"), new OpMake());
-        global.addName(new Word("erase"), new OpErase());
-        global.addName(new Word("print"), new OpPrint());
-        global.addName(new Word("readlist"), new OpReadlist());
-        global.addName(new Word(":"), new OpThing());
-        global.addName(new Word("thing"), new OpThing());
-        global.addName(new Word("isname"), new OpIsname());
-        global.addName(new Word("read"), new OpRead());
-        global.addName(new Word("add"), new OpAdd());
-        global.addName(new Word("sub"), new OpSub());
-        global.addName(new Word("mul"), new OpMul());
-        global.addName(new Word("div"), new OpDiv());
-        global.addName(new Word("mod"), new OpMod());
-        global.addName(new Word("eq"), new OpEq());
-        global.addName(new Word("gt"), new OpGt());
-        global.addName(new Word("lt"), new OpLt());
-        global.addName(new Word("and"), new OpAnd());
-        global.addName(new Word("or"), new OpOr());
-        global.addName(new Word("not"), new OpNot());
-        global.addName(new Word("repeat"), new OpRepeat());
-        global.addName(new Word("output"), new OpOutput());
-        global.addName(new Word("stop"), new OpStop());
-        global.addName(new Word("export"), new OpExport());
-        global.addName(new Word("isnumber"), new OpIsnumber());
-        global.addName(new Word("isword"), new OpIsword());
-        global.addName(new Word("islist"), new OpIslist());
-        global.addName(new Word("isbool"), new OpIsbool());
-        global.addName(new Word("isempty"), new OpIsempty());
-        global.addName(new Word("random"), new OpRandom());
-        global.addName(new Word("sqrt"), new OpSqrt());
-        global.addName(new Word("int"), new OpInt());
-        global.addName(new Word("word"), new OpWord());
-        global.addName(new Word("if"), new OpIf());
-        global.addName(new Word("sentence"), new OpSentence());
-        global.addName(new Word("list"), new OpList());
-        global.addName(new Word("join"), new OpJoin());
-        global.addName(new Word("first"), new OpFirst());
-        global.addName(new Word("last"), new OpLast());
-        global.addName(new Word("butfirst"), new OpButfirst());
-        global.addName(new Word("butlast"), new OpButLast());
+        builtin.addName(new Word("make"), new OpMake());
+        builtin.addName(new Word("erase"), new OpErase());
+        builtin.addName(new Word("print"), new OpPrint());
+        builtin.addName(new Word("readlist"), new OpReadlist());
+        builtin.addName(new Word(":"), new OpThing());
+        builtin.addName(new Word("thing"), new OpThing());
+        builtin.addName(new Word("isname"), new OpIsname());
+        builtin.addName(new Word("read"), new OpRead());
+        builtin.addName(new Word("add"), new OpAdd());
+        builtin.addName(new Word("sub"), new OpSub());
+        builtin.addName(new Word("mul"), new OpMul());
+        builtin.addName(new Word("div"), new OpDiv());
+        builtin.addName(new Word("mod"), new OpMod());
+        builtin.addName(new Word("eq"), new OpEq());
+        builtin.addName(new Word("gt"), new OpGt());
+        builtin.addName(new Word("lt"), new OpLt());
+        builtin.addName(new Word("and"), new OpAnd());
+        builtin.addName(new Word("or"), new OpOr());
+        builtin.addName(new Word("not"), new OpNot());
+        builtin.addName(new Word("repeat"), new OpRepeat());
+        builtin.addName(new Word("output"), new OpOutput());
+        builtin.addName(new Word("stop"), new OpStop());
+        builtin.addName(new Word("export"), new OpExport());
+        builtin.addName(new Word("isnumber"), new OpIsnumber());
+        builtin.addName(new Word("isword"), new OpIsword());
+        builtin.addName(new Word("islist"), new OpIslist());
+        builtin.addName(new Word("isbool"), new OpIsbool());
+        builtin.addName(new Word("isempty"), new OpIsempty());
+        builtin.addName(new Word("random"), new OpRandom());
+        builtin.addName(new Word("sqrt"), new OpSqrt());
+        builtin.addName(new Word("int"), new OpInt());
+        builtin.addName(new Word("word"), new OpWord());
+        builtin.addName(new Word("if"), new OpIf());
+        builtin.addName(new Word("sentence"), new OpSentence());
+        builtin.addName(new Word("list"), new OpList());
+        builtin.addName(new Word("join"), new OpJoin());
+        builtin.addName(new Word("first"), new OpFirst());
+        builtin.addName(new Word("last"), new OpLast());
+        builtin.addName(new Word("butfirst"), new OpButfirst());
+        builtin.addName(new Word("butlast"), new OpButLast());
+        builtin.addName(new Word("wait"), new OpWait());
+        builtin.addName(new Word("poall"), new OpPoall());
+        builtin.addName(new Word("erall"), new OpErall());
+        builtin.addName(new Word("save"), new OpSave());
+        builtin.addName(new Word("load"), new OpLoad());
+        builtin.addName(new Word("run"), new OpRun());
+        builtin.addName(new Word("pi"), new Word("3.1415926535"));
 
         if (verbose) {
             System.out.println("[MUA Interpreter | Zhixuan Lin]");
@@ -177,5 +186,6 @@ public class Interpreter {
     }
 
 
-    private Scope global = new Scope();
+    private Scope global;
+    private Scope builtin;
 }
