@@ -1,8 +1,6 @@
 package lib;
 
-import lib.MUAObject;
-
-public class Bool extends MUAObject {
+public class Bool extends MuaObject {
     // ctor
     public Bool(boolean b) {
         this.value = b;

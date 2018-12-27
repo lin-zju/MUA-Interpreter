@@ -2,8 +2,8 @@ package lib;
 
 import java.util.ArrayList;
 
-public class List extends MUAObject {
-    public List(ArrayList<MUAObject> list) {
+public class List extends MuaObject {
+    public List(ArrayList<MuaObject> list) {
         this.value = list;
     }
 
@@ -11,11 +11,10 @@ public class List extends MUAObject {
     public String toString() {
         String content = "";
         boolean first = true;
-        for (MUAObject v: value) {
+        for (MuaObject v: value) {
             content += (first ? "" : " ") + v.toString();
             first = false;
         }
-//        return String.join(" ", value);
         return "[" + content + "]";
     }
 
@@ -25,9 +24,9 @@ public class List extends MUAObject {
     }
 
     @Override
-    public ArrayList<MUAObject> getValue() {
+    public ArrayList<MuaObject> getValue() {
         return value;
     }
 
-    private ArrayList<MUAObject> value;
+    private ArrayList<MuaObject> value;
 }

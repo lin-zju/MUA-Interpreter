@@ -35,15 +35,15 @@ public class Scope {
         return enclosingScope;
     }
 
-    public void addName(Word name, MUAObject value) {
+    public void addName(Word name, MuaObject value) {
         scope.put(name.getValue(), value);
         if (value.enclosingScope == null) {
             value.enclosingScope = this;
         }
     }
 
-    public MUAObject getName(Word name) throws NameError {
-        MUAObject ret = scope.get(name.toString());
+    public MuaObject getName(Word name) throws NameError {
+        MuaObject ret = scope.get(name.toString());
         if (ret == null) {
             if (enclosingScope == null) {
                 throw new NameError("name '" + name.getValue() + "' not found");
@@ -56,7 +56,7 @@ public class Scope {
     }
 
     public void removeName(Word name) throws NameError {
-        MUAObject succeed = scope.remove(name.getValue());
+        MuaObject succeed = scope.remove(name.getValue());
         // remove global
         if (succeed == null) {
             if (enclosingScope != null) {
@@ -70,18 +70,18 @@ public class Scope {
         return scope.containsKey(name.getValue());
     }
 
-    public void setReturnValue(MUAObject o) {
+    public void setReturnValue(MuaObject o) {
         returnValue = o;
     }
 
-    public MUAObject getReturnValue() {
+    public MuaObject getReturnValue() {
         return returnValue;
     }
 
     private String scopeName = "global";
     private Type scopeType = Type.GLOBAL;
     private Scope enclosingScope = null;
-    private MUAObject returnValue = new None();
+    private MuaObject returnValue = new None();
 
     public boolean getStopFlag() {
         return stopFlag;
@@ -92,5 +92,5 @@ public class Scope {
     }
 
     private boolean stopFlag = false;
-    private HashMap<String, MUAObject> scope = new HashMap<>();
+    private HashMap<String, MuaObject> scope = new HashMap<>();
 }

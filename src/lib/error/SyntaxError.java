@@ -1,6 +1,6 @@
 package lib.error;
 
-public class SyntaxError extends MUAError {
+public class SyntaxError extends MuaError {
     public SyntaxError(String s) {
         super(s);
     }

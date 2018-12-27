@@ -1,8 +1,0 @@
-error
-    ├── ArgError.java
-    ├── ArithmeticError.java
-    ├── InputError.java
-    ├── MUAError.java
-    ├── NameError.java
-    ├── SyntaxError.java
-    └── TypeError.java

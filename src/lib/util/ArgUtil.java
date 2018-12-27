@@ -20,7 +20,7 @@ public class ArgUtil {
 
     public static void argCheck(String name,
                                 ArrayList<Class> typelist,
-                                ArrayList<MUAObject> arglist) throws ArgError, TypeError {
+                                ArrayList<MuaObject> arglist) throws ArgError, TypeError {
 
         // arg count
         if (arglist.size() != typelist.size()) {
@@ -30,7 +30,7 @@ public class ArgUtil {
 
 
         for (int i = 0; i < arglist.size(); i++) {
-            MUAObject o = typeCast(typelist.get(i), arglist.get(i));
+            MuaObject o = typeCast(typelist.get(i), arglist.get(i));
             if (o != null) {
                 arglist.set(i, o);
             }
@@ -42,7 +42,7 @@ public class ArgUtil {
         }
     }
 
-    public static MUAObject typeCast(Class c, MUAObject o) {
+    public static MuaObject typeCast(Class c, MuaObject o) {
         if (o instanceof Word) {
             if (c == Number.class) {
                 return ((Word) o).toNumber();
@@ -65,8 +65,8 @@ public class ArgUtil {
 
 //
 //    public static int argCheck(String name,
-//                                ArrayList<MUAObject.Type>[] typelists,
-//                                ArrayList<MUAObject> arglist) throws ArgError, TypeError {
+//                                ArrayList<MuaObject.Type>[] typelists,
+//                                ArrayList<MuaObject> arglist) throws ArgError, TypeError {
 //
 //        // arg count
 //        if (arglist.size() != typelists[0].size()) {
@@ -77,10 +77,10 @@ public class ArgUtil {
 //        boolean match = false;
 //        int i = 0;
 //        for (i = 0; i < typelists.length; i++) {
-//            ArrayList<MUAObject.Type> typelist = typelists[i];
+//            ArrayList<MuaObject.Type> typelist = typelists[i];
 //            boolean pass = true;
 //            for (int j = 0; j < arglist.size(); j++) {
-//                if (arglist.get(j).getType() != typelist.get(j) && typelist.get(j) != MUAObject.Type.ANY) {
+//                if (arglist.get(j).getType() != typelist.get(j) && typelist.get(j) != MuaObject.Type.ANY) {
 //                    pass = false;
 //                }
 //            }
@@ -97,12 +97,12 @@ public class ArgUtil {
 //        return i;
 //    }
 
-    public static void evalAll(ArrayList<MUAObject> arglist, Scope scope) throws Exception {
-        for (int i = 0; i < arglist.size(); i++) {
-
-            if (arglist.get(i) instanceof Expr) {
-                arglist.set(i, ((Expr) arglist.get(i)).eval(scope));
-            }
-        }
-    }
+//    public static void evalAll(ArrayList<MuaObject> arglist, Scope scope) throws Exception {
+//        for (int i = 0; i < arglist.size(); i++) {
+//
+//            if (arglist.get(i) instanceof Expr) {
+//                arglist.set(i, ((Expr) arglist.get(i)).eval(scope, ));
+//            }
+//        }
+//    }
 }

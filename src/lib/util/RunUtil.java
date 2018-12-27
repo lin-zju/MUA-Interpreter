@@ -1,27 +1,29 @@
 package lib.util;
 
-import lib.Expr;
 import lib.List;
-import lib.MUAObject;
+import lib.MuaObject;
 import lib.Scope;
-import static lib.util.ParserUtil.parseObj;
+import lib.operation.OpStop;
+
+import static lib.util.ParserUtil.evalObj;
+import static lib.util.ParserUtil.parseExpr;
+
 import java.util.ArrayList;
 
 public class RunUtil {
-    public static MUAObject runList(Scope scope, List l) throws Exception {
+    public static void runList(Scope scope, List l) throws Exception {
         ArrayList<String> tokens = new ArrayList<>();
-        for (MUAObject token : l.getValue()) {
+        for (MuaObject token : l.getValue()) {
             tokens.add(token.toString());
         }
-        ArrayList<MUAObject> objlist = parseObj(tokens, scope);
-        for (MUAObject obj : objlist) {
-            if (obj instanceof Expr) {
-                ((Expr)obj).eval(scope);
-            }
-            if (scope.getStopFlag()) {
-                return scope.getReturnValue();
+        try {
+            ArrayList<ArrayList<String>> exprs = parseExpr(tokens, scope);
+            for (ArrayList<String> expr: exprs) {
+                 evalObj(expr, scope);
             }
         }
-        return scope.getReturnValue();
+        catch (OpStop.StopSignal s) {
+            throw s;
+        }
     }
 }

@@ -1,8 +1,15 @@
 package lib;
 
-public class Word extends MUAObject {
+import java.nio.charset.IllegalCharsetNameException;
+
+public class Word extends MuaObject {
     public Word(double d) {
-        this.value = Double.toString(d);
+        if (isInt(d)) {
+            this.value = Integer.toString((int)d);
+        }
+        else {
+            this.value = Double.toString(d);
+        }
     }
 
     public Word(boolean b) {
@@ -46,6 +53,14 @@ public class Word extends MUAObject {
         }
         else
             return null;
+    }
+
+    private static boolean isInt(double d) {
+        final double THRESHOLD = 1e-5;
+        if ((d - Math.floor((d)) < THRESHOLD) || (Math.ceil(d)) - d < THRESHOLD)
+            return true;
+        else
+            return false;
     }
 
     private String value;

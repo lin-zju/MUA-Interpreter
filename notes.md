@@ -116,3 +116,18 @@ The structure of everything is:
 
 * list   
     * save tokens only?
+
+```
+make "fib [
+[n]
+[
+    if eq :n 1
+    [
+        output 1
+        stop
+    ]
+    []
+    output mul :n fib sub :n 1
+]
+]      
+```
