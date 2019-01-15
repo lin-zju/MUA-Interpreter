@@ -23,7 +23,8 @@ public class OpButLast extends Expr {
             List l = (List)obj;
             ArrayList<MuaObject> list = (ArrayList<MuaObject>) l.getValue().clone();
             if (list.size() == 0) {
-                throw new IndexError("list index out of range");
+//                throw new IndexError("list index out of range");
+                return new List(list);
             }
             list.remove(list.size() - 1);
 
@@ -33,7 +34,8 @@ public class OpButLast extends Expr {
             Word w = (Word)obj;
             String str = w.getValue();
             if (w.getValue().length() == 0) {
-                throw new IndexError("word index out of range");
+//                throw new IndexError("word index out of range");
+                return new Word(str);
             }
             return new Word(str.substring(0, str.length() - 1));
         }

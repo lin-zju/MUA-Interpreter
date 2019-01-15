@@ -1,6 +1,8 @@
 package lib;
 
-abstract public class MuaObject {
+import java.io.Serializable;
+
+abstract public class MuaObject implements Serializable {
 
     // type name
     abstract public String getTypeString();

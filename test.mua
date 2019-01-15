@@ -1,0 +1,50 @@
+make "average [
+[a b]
+[
+	output div add :a :b 2
+]]
+
+make "abs [
+[a]
+[
+	if lt :a 0 [
+		output sub 0 :a
+	] [
+		output :a
+	]
+]]
+
+make "sqrt [
+[x]
+[
+	make "good_enough [
+	[guess x]
+	[
+		make "diff abs sub mul :guess :guess :x
+		if lt :diff 0.001 [
+			output true
+		] [
+			output false
+		]
+	]]
+
+	make "improve [
+	[guess x]
+	[
+		output average :guess div :x :guess
+	]]
+
+	make "sqrt_iter [
+	[guess x]
+	[
+		if good_enough :guess :x [
+			output :guess
+		] [
+			output sqrt_iter improve :guess :x :x
+		]
+
+	]]
+	output sqrt_iter 1.0 :x
+]]
+
+print sqrt 2

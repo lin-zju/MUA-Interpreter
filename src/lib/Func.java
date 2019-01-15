@@ -49,7 +49,7 @@ public class Func extends Expr {
     public MuaObject eval(Scope scope, ArrayList<MuaObject> arglist) throws Exception {
         super.eval(scope, arglist);
         ArgUtil.argCheck(name, argtypes, arglist);
-        Scope local = new Scope(name, Scope.Type.FUNCTION, lexicalEnclosingScope);
+        Scope local = new Scope(name, Scope.Type.FUNCTIONAL, lexicalEnclosingScope);
         for (int i = 0; i < argNames.size(); i++) {
             local.addName(argNames.get(i), arglist.get(i));
         }
@@ -59,8 +59,6 @@ public class Func extends Expr {
         catch (OpStop.StopSignal e) {
 
         }
-//        throw new SyntaxError("function not yet implemented");
-
         return local.getReturnValue();
     }
 

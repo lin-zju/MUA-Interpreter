@@ -19,7 +19,7 @@ public class OpExport extends Expr {
         super.eval(scope, arglist);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
         Word word = (Word) arglist.get(0);
-        if (scope.getEnclosingScope() != null) {
+        if (scope.getType() == Scope.Type.FUNCTIONAL) {
             scope.getEnclosingScope().addName(word, scope.getName(word));
         }
         return new None();

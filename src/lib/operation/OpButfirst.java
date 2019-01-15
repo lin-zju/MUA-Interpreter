@@ -22,7 +22,8 @@ public class OpButfirst extends Expr {
             List l = (List)obj;
             ArrayList<MuaObject> list = (ArrayList<MuaObject>) l.getValue().clone();
             if (list.size() == 0) {
-                throw new IndexError("list index out of range");
+//                throw new IndexError("list index out of range");
+                return new List(list);
             }
             list.remove(0);
 
@@ -31,7 +32,8 @@ public class OpButfirst extends Expr {
         else {
             Word w = (Word)obj;
             if (w.getValue().length() == 0) {
-                throw new IndexError("word index out of range");
+//                throw new IndexError("word index out of range");
+                return new Word(w.getValue());
             }
             return new Word(w.getValue().substring(1));
         }

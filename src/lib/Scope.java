@@ -1,34 +1,32 @@
 package lib;
 import lib.error.NameError;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
-public class Scope {
-    enum Type {
+public class Scope implements Serializable {
+
+    public enum Type {
         GLOBAL,
-        FUNCTION
-    }
-
-    // by default create a global scope
-    public Scope() {
-        this("global", Type.GLOBAL, null);
-
+        FUNCTIONAL,
+        BUILTIN
     }
 
     // create a function scope
     public Scope(String name, Type type, Scope enclosing) {
         this.scopeName = name;
-        this.scopeType = type;
         this.enclosingScope = enclosing;
+        this.type = type;
     }
 
 
+    public Type getType() {
+        return type;
+    }
     public String getScopeName() {
         return scopeName;
-    }
-
-    public Type getScopeType() {
-        return scopeType;
     }
 
     public Scope getEnclosingScope() {
@@ -55,19 +53,28 @@ public class Scope {
 
     }
 
+
     public void removeName(Word name) throws NameError {
         MuaObject succeed = scope.remove(name.getValue());
         // remove global
         if (succeed == null) {
             if (enclosingScope != null) {
                 enclosingScope.removeName(name);
+            } else {
+                throw new NameError("name '" + name.getValue() + "' not found");
             }
-            throw new NameError("name '" + name.getValue() + "' not found");
         }
     }
 
     public boolean hasName(Word name) {
-        return scope.containsKey(name.getValue());
+        if (!scope.containsKey(name.getValue())) {
+            if (enclosingScope == null)
+                return false;
+            else
+                return enclosingScope.hasName(name);
+        }
+        else
+            return true;
     }
 
     public void setReturnValue(MuaObject o) {
@@ -78,19 +85,25 @@ public class Scope {
         return returnValue;
     }
 
+    public Set<String> getAllName() {
+        return scope.keySet();
+    }
+
+    public void deleteAllName() {
+        scope.clear();
+    }
+
+    public void addAllName(Scope newScope) {
+        for (MuaObject o : newScope.scope.values()) {
+            o.enclosingScope = this;
+        }
+        scope.putAll(newScope.scope);
+    }
+
     private String scopeName = "global";
-    private Type scopeType = Type.GLOBAL;
     private Scope enclosingScope = null;
+    private Type type;
     private MuaObject returnValue = new None();
 
-    public boolean getStopFlag() {
-        return stopFlag;
-    }
-
-    public void setStopFlag(boolean stopFlag) {
-        this.stopFlag = stopFlag;
-    }
-
-    private boolean stopFlag = false;
     private HashMap<String, MuaObject> scope = new HashMap<>();
 }

@@ -106,6 +106,7 @@ public class ParserUtil {
         }
     }
 
+
     public static MuaObject evalObj(ArrayList<String> tokens, Scope scope) throws Exception {
         // do evaluation
         Stack<MuaObject> opStack = new Stack<>();

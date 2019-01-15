@@ -15,7 +15,7 @@ public class OpStop extends Expr {
     public None eval(Scope scope, ArrayList<MuaObject> arglist) throws Exception {
         super.eval(scope, arglist);
         ArgUtil.argCheck(getOpName(), argtypes, arglist);
-        if (scope.getEnclosingScope() != null) {
+        if (scope.getType() == Scope.Type.FUNCTIONAL) {
             throw new StopSignal();
         }
         return new None();
