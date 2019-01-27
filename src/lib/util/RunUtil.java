@@ -7,6 +7,7 @@ import lib.operation.OpStop;
 
 import static lib.util.ParserUtil.evalObj;
 import static lib.util.ParserUtil.parseExpr;
+import static lib.util.ParserUtil.parseSingleExpr;
 
 import java.util.ArrayList;
 
@@ -17,9 +18,9 @@ public class RunUtil {
             tokens.add(token.toString());
         }
         try {
-            ArrayList<ArrayList<String>> exprs = parseExpr(tokens, scope);
-            for (ArrayList<String> expr: exprs) {
-                 evalObj(expr, scope);
+            while (!tokens.isEmpty()) {
+                ArrayList<String> expr = parseSingleExpr(scope, tokens);
+                evalObj(expr, scope);
             }
         }
         catch (OpStop.StopSignal s) {

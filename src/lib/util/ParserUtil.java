@@ -105,7 +105,42 @@ public class ParserUtil {
             exprStack.add(expr);
         }
     }
+    public static ArrayList<String> parseSingleExpr(Scope scope, ArrayList<String> tokens) throws Exception {
+        ArrayList<String> expr = new ArrayList<>();
+        if (tokens.isEmpty()) {
+            return expr;
+        }
+        else {
+            // pop first token
+            String token = tokens.get(0);
+            tokens.remove(0);
+            expr.add(token);
 
+            MuaObject obj = parseBasicObj(token);
+            if (obj == null) {
+                // operation
+                MuaObject o = scope.getName(new Word(token));
+                Expr op;
+
+                if (o instanceof Expr) {
+                    op = (Expr) o;
+                }
+                else {
+                    op = new Func(token, scope);
+                }
+                int argNum = op.getArgNum();
+                for (int i = 0; i < argNum; i++) {
+                    if (!tokens.isEmpty()) {
+                        expr.addAll(parseSingleExpr(scope, tokens));
+                    }
+                }
+                // construct expr
+            }
+            return expr;
+
+        }
+
+    }
 
     public static MuaObject evalObj(ArrayList<String> tokens, Scope scope) throws Exception {
         // do evaluation
