@@ -1,6 +1,6 @@
 package lib.error;
 
-public class NameError extends MUAError {
+public class NameError extends MuaError {
     public NameError(String s) {
         super(s);
     }

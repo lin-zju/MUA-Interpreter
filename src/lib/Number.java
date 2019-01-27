@@ -1,6 +1,6 @@
 package lib;
 
-public class Number extends MUAObject {
+public class Number extends MuaObject {
     public Number(double d) {
         this.value = d;
     }

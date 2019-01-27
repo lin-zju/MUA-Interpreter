@@ -1,7 +1,7 @@
 package lib;
 
 
-public class None extends MUAObject {
+public class None extends MuaObject {
     // ctor
     public None() {
     }

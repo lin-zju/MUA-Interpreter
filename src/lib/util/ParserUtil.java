@@ -6,13 +6,13 @@ import lib.*;
 import lib.operation.*;
 import lib.operation.operator.*;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Stack;
 
 public class ParserUtil {
-    public static MUAObject parseBasicObj(String str) throws Exception {
+    public static MuaObject parseBasicObj(String str) throws Exception {
         if (str.startsWith("\"")) {
 //            if (str.length() == 1)
 //                throw new SyntaxError("empty word body");
@@ -39,7 +39,7 @@ public class ParserUtil {
         }
         else if (str.startsWith("[") && str.endsWith("]")) {
             ArrayList<String> content = parseToken(str.substring(1, str.length() - 1));
-            ArrayList<MUAObject> objlist = new ArrayList<>();
+            ArrayList<MuaObject> objlist = new ArrayList<>();
             for (String token : content) {
                 if (token.startsWith("[") && token.endsWith("]")) {
                     objlist.add(parseBasicObj(token));
@@ -56,47 +56,130 @@ public class ParserUtil {
         }
     }
 
-    public static ArrayList<MUAObject> parseObj(ArrayList<String> tokens, Scope scope) throws Exception {
-        ArrayList<MUAObject> objlist = new ArrayList<>();
+    public static ArrayList<ArrayList<String>> parseExpr(ArrayList<String> tokens, Scope scope) throws Exception {
+        // do evaluation
+        Stack<ArrayList<String>> exprStack = new Stack<>();
         for (int i = tokens.size() - 1; i >= 0; i--) {
-            reduce(tokens.get(i), objlist, scope);
+            reduceExpr(tokens.get(i), exprStack, scope);
         }
-        return objlist;
+        ArrayList<ArrayList<String>> exprList = new ArrayList<>();
+        while (!exprStack.isEmpty()) {
+            exprList.add(exprStack.pop());
+        }
+
+        return exprList;
     }
 
 
-    public static void reduce(String token, ArrayList<MUAObject> objlist, Scope scope) throws Exception {
-        MUAObject obj = parseBasicObj(token);
-        Class c = null;
+    public static void reduceExpr(String token, Stack<ArrayList<String>> exprStack, Scope scope) throws Exception {
+        MuaObject obj = parseBasicObj(token);
+        ArrayList<String> expr = new ArrayList<>();
         if (obj != null) {
-            objlist.add(0, obj);
-        }
-        else if (keywordToClass.containsKey(token)){
-            c = keywordToClass.get(token);
-            Constructor ctor = c.getConstructor();
-            Expr expr = (Expr) ctor.newInstance();
-            int argNum = (int) c.getMethod("getArgNum").invoke(expr);
-            ArrayList<MUAObject> arglist = new ArrayList<>();
-            for (int i = 0; i < argNum; i++) {
-                if (!objlist.isEmpty()) {
-                    arglist.add(objlist.remove(0));
-                }
-            }
-            expr.setArglist(arglist);
-            objlist.add(0, expr);
+            // primitive objects
+            expr.add(token);
+            exprStack.push(expr);
         }
         else {
-            c = Func.class;
-            Func func = new Func(token, scope);
-            int argNum = func.getArgNum();
-            ArrayList<MUAObject> arglist = new ArrayList<>();
+            // operation
+            MuaObject o = scope.getName(new Word(token));
+            Expr op;
+
+            if (o instanceof Expr) {
+                op = (Expr) o;
+            }
+            else {
+                op = new Func(token, scope);
+            }
+            int argNum = op.getArgNum();
+            ArrayList<ArrayList<String>> arglist = new ArrayList<>();
             for (int i = 0; i < argNum; i++) {
-                if (!objlist.isEmpty()) {
-                    arglist.add(objlist.remove(0));
+                if (!exprStack.isEmpty()) {
+                    arglist.add(exprStack.pop());
                 }
             }
-            func.setArglist(arglist);
-            objlist.add(0, func);
+            // construct expr
+            expr.add(token);
+            for (ArrayList<String> arg : arglist) {
+                expr.addAll(arg);
+            }
+            exprStack.add(expr);
+        }
+    }
+    public static ArrayList<String> parseSingleExpr(Scope scope, ArrayList<String> tokens) throws Exception {
+        ArrayList<String> expr = new ArrayList<>();
+        if (tokens.isEmpty()) {
+            return expr;
+        }
+        else {
+            // pop first token
+            String token = tokens.get(0);
+            tokens.remove(0);
+            expr.add(token);
+
+            MuaObject obj = parseBasicObj(token);
+            if (obj == null) {
+                // operation
+                MuaObject o = scope.getName(new Word(token));
+                Expr op;
+
+                if (o instanceof Expr) {
+                    op = (Expr) o;
+                }
+                else {
+                    op = new Func(token, scope);
+                }
+                int argNum = op.getArgNum();
+                for (int i = 0; i < argNum; i++) {
+                    if (!tokens.isEmpty()) {
+                        expr.addAll(parseSingleExpr(scope, tokens));
+                    }
+                }
+                // construct expr
+            }
+            return expr;
+
+        }
+
+    }
+
+    public static MuaObject evalObj(ArrayList<String> tokens, Scope scope) throws Exception {
+        // do evaluation
+        Stack<MuaObject> opStack = new Stack<>();
+        for (int i = tokens.size() - 1; i >= 0; i--) {
+            reduceObj(tokens.get(i), opStack, scope);
+        }
+        if (opStack.size() != 1) {
+            throw new SyntaxError("more than one statement per line");
+        }
+        return  opStack.pop();
+    }
+
+
+    public static void reduceObj(String token, Stack<MuaObject> opStack, Scope scope) throws Exception {
+        MuaObject obj = parseBasicObj(token);
+        if (obj != null) {
+            // primitive objects
+            opStack.push(obj);
+        }
+        else {
+            // operation
+            MuaObject o = scope.getName(new Word(token));
+            Expr expr;
+
+            if (o instanceof Expr) {
+                expr = (Expr) o;
+            }
+            else {
+                expr = new Func(token, scope);
+            }
+            int argNum = expr.getArgNum();
+            ArrayList<MuaObject> arglist = new ArrayList<>();
+            for (int i = 0; i < argNum; i++) {
+                if (!opStack.isEmpty()) {
+                    arglist.add(opStack.pop());
+                }
+            }
+            opStack.push(expr.eval(scope, arglist));
         }
     }
 
@@ -135,16 +218,16 @@ public class ParserUtil {
                     prefix += "[";
                 }
                 String suffix = "]";
-                while (item.endsWith(suffix))
+                while (item.endsWith(suffix) && count > 0)
                 {
                     count--;
                     suffix += "]";
                 }
                 temp.add(item);
-                if (count < 0) {
-                    throw new SyntaxError("Unpaired ']'");
-                }
-                else if (count == 0) {
+//                if (count > 0) {
+//                    throw new SyntaxError("Unpaired '['");
+//                }
+                if (count == 0) {
                     tokens.add(String.join(" ", temp));
                     temp.clear();
                 }
@@ -154,44 +237,43 @@ public class ParserUtil {
             throw new SyntaxError("Unpaired [");
         }
         return tokens;
-
     }
 
 
 
     private static final HashMap<String, Class> keywordToClass = new HashMap<>();
     static {
-        keywordToClass.put("make", Make.class);
-        keywordToClass.put("erase", Erase.class);
-        keywordToClass.put("print", Print.class);
-        keywordToClass.put("readlist", Readlist.class);
-        keywordToClass.put(":", Thing.class);
-        keywordToClass.put("thing", Thing.class);
-        keywordToClass.put("isname", Isname.class);
-        keywordToClass.put("read", Read.class);
-        keywordToClass.put("add", Add.class);
-        keywordToClass.put("sub", Sub.class);
-        keywordToClass.put("mul", Mul.class);
-        keywordToClass.put("div", Div.class);
-        keywordToClass.put("mod", Mod.class);
-        keywordToClass.put("eq", Eq.class);
-        keywordToClass.put("gt", Gt.class);
-        keywordToClass.put("lt", Lt.class);
-        keywordToClass.put("and", And.class);
-        keywordToClass.put("or", Or.class);
-        keywordToClass.put("not", Not.class);
-        keywordToClass.put("repeat", Repeat.class);
-        keywordToClass.put("output", Output.class);
-        keywordToClass.put("stop", Stop.class);
-        keywordToClass.put("export", Export.class);
-        keywordToClass.put("isnumber", Isnumber.class);
-        keywordToClass.put("isword", Isword.class);
-        keywordToClass.put("islist", Islist.class);
-        keywordToClass.put("isbool", Isbool.class);
-        keywordToClass.put("isempty", Isempty.class);
-        keywordToClass.put("random", Random.class);
-        keywordToClass.put("sqrt", Sqrt.class);
-        keywordToClass.put("int", Int.class);
+        keywordToClass.put("make", OpMake.class);
+        keywordToClass.put("erase", OpErase.class);
+        keywordToClass.put("print", OpPrint.class);
+        keywordToClass.put("readlist", OpReadlist.class);
+        keywordToClass.put(":", OpThing.class);
+        keywordToClass.put("thing", OpThing.class);
+        keywordToClass.put("isname", OpIsname.class);
+        keywordToClass.put("read", OpRead.class);
+        keywordToClass.put("add", OpAdd.class);
+        keywordToClass.put("sub", OpSub.class);
+        keywordToClass.put("mul", OpMul.class);
+        keywordToClass.put("div", OpDiv.class);
+        keywordToClass.put("mod", OpMod.class);
+        keywordToClass.put("eq", OpEq.class);
+        keywordToClass.put("gt", OpGt.class);
+        keywordToClass.put("lt", OpLt.class);
+        keywordToClass.put("and", OpAnd.class);
+        keywordToClass.put("or", OpOr.class);
+        keywordToClass.put("not", OpNot.class);
+        keywordToClass.put("repeat", OpRepeat.class);
+        keywordToClass.put("output", OpOutput.class);
+        keywordToClass.put("stop", OpStop.class);
+        keywordToClass.put("export", OpExport.class);
+        keywordToClass.put("isnumber", OpIsnumber.class);
+        keywordToClass.put("isword", OpIsword.class);
+        keywordToClass.put("islist", OpIslist.class);
+        keywordToClass.put("isbool", OpIsbool.class);
+        keywordToClass.put("isempty", OpIsempty.class);
+        keywordToClass.put("random", OpRandom.class);
+        keywordToClass.put("sqrt", OpSqrt.class);
+        keywordToClass.put("int", OpInt.class);
 
     }
 }

@@ -1,6 +1,6 @@
 package lib.error;
 
-public class TypeError extends MUAError {
+public class TypeError extends MuaError {
 
     public TypeError(String s) {
         super(s);
